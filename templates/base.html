@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="{{ user_language if user_language in ['en', 'pt-br', 'es'] else 'pt-br' }}" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Controle de Patrimônio{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  </head>
+  <body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white min-h-screen">
+    
+    <!-- Cabeçalho com logo e navegação -->
+    <header class="bg-blue-600 dark:bg-blue-800 shadow p-4 flex items-center justify-between">
+      <!-- Bloco com logo e título -->
+      <div class="flex items-center gap-4">
+        <!-- Logo -->
+        <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" class="logo" />
+        <!-- Título do site -->
+        <h1 class="text-2xl font-bold text-white">Controle de Patrimônio</h1>
+      </div>
+      <!-- Menu de navegação -->
+      <nav class="space-x-4">
+        <a href="{{ url_for('index') }}" class="text-white hover:underline">Home</a> |
+        {% if session.username %}
+          <a href="{{ url_for('logout') }}" class="text-white hover:underline">Logout</a>
+        {% else %}
+          <a href="{{ url_for('login') }}" class="text-white hover:underline">Login</a>
+        {% endif %}
+      </nav>
+    </header>
+
+    <main class="p-6">
+      {% block content %}{% endblock %}
+    </main>
+
+    <footer class="text-center p-4 text-sm text-gray-400">
+      &copy; {{ datetime.utcnow().year }} Controle de Patrimônio
+    </footer>
+    
+  </body>
+</html>
+

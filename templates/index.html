@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Página Inicial{% endblock %}
+{% block content %}
+<h2>Lista de Equipamentos</h2>
+<p>
+  <a href="{{ url_for('cadastrar') }}">Cadastrar Equipamento</a> | 
+  <a href="{{ url_for('consulta') }}">Consultar Equipamentos</a> | 
+  <a href="{{ url_for('exportar_csv') }}">Exportar CSV</a> | 
+  <a href="{{ url_for('gerar_pdf') }}">Gerar PDF</a> | 
+  <a href="{{ url_for('cadastro_usuario') }}">Cadastrar Usuário</a>
+</p>
+<table border="1" cellpadding="5">
+  <thead>
+    <tr>
+      <th>ID Público</th>
+      <th>Tipo</th>
+      <th>Localização</th>
+      <th>Status</th>
+      <th>Marca</th>
+      <th>Modelo</th>
+      <th>Responsável</th>
+      <th>SPE</th>
+      <th>Valor</th>
+      <th>Observações</th>
+      <th>Última Manutenção</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for eq in equipamentos %}
+      <tr>
+        <td>{{ eq.id_publico }}</td>
+        <td>{{ eq.tipo }}</td>
+        <td>{{ eq.localizacao }}</td>
+        <td>{{ eq.status }}</td>
+        <td>{{ eq.marca }}</td>
+        <td>{{ eq.modelo }}</td>
+        <td>{{ eq.responsavel }}</td>
+        <td>{{ eq.SPE }}</td>
+        <td>{{ eq.valor }}</td>
+        <td>{{ eq.observacoes }}</td>
+        <td>{{ eq.ultima_manutencao }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

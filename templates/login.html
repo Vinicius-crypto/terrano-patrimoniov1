@@ -1,0 +1,25 @@
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{ category }}">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+{% extends "base.html" %}
+
+{% block title %}Login - Controle de Patrimônio{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <h2 class="text-center text-xl font-semibold mb-4">Login</h2>
+    <form method="POST" action="{{ url_for('login') }}">
+      <input type="text" name="username" placeholder="Usuário" required>
+      <input type="password" name="senha" placeholder="Senha" required>
+      <button type="submit">Entrar</button>
+    </form>
+    <p class="mt-4 text-sm text-center">
+      Não tem acesso? <a href="{{ url_for('solicitar_acesso') }}">Solicitar ao administrador</a>
+    </p>
+</div>
+{% endblock %}

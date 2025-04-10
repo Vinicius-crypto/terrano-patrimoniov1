@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Consulta de Equipamentos{% endblock %}
+{% block content %}
+<div class="container" style="max-width: 1000px; margin: auto;">
+  <h2 class="text-center mb-4">Consulta de Equipamentos</h2>
+  
+  <!-- Formulário de busca -->
+  <form method="post" class="mb-4" style="display: flex; justify-content: center; gap: 10px;">
+      <input type="text" name="busca" placeholder="Buscar..." value="{{ busca }}" style="flex:1; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+      <button type="submit" class="btn" style="padding: 10px 20px;">Buscar</button>
+  </form>
+  
+  <!-- Tabela de equipamentos -->
+  <table class="table" style="width:100%; border-collapse: collapse; margin: auto;">
+    <thead style="background-color: #f0f0f0;">
+      <tr>
+        <th style="border: 1px solid #ccc; padding: 8px;">ID Público</th>
+        <th style="border: 1px solid #ccc; padding: 8px;">Tipo</th>
+        <th style="border: 1px solid #ccc; padding: 8px;">Localização</th>
+        <th style="border: 1px solid #ccc; padding: 8px;">Status</th>
+        <th style="border: 1px solid #ccc; padding: 8px;">Marca</th>
+        <th style="border: 1px solid #ccc; padding: 8px;">Modelo</th>
+        <th style="border: 1px solid #ccc; padding: 8px;">Termo</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in resultados %}
+      <tr>
+        <td style="border: 1px solid #ccc; padding: 8px;">{{ row['id_publico'] }}</td>
+        <td style="border: 1px solid #ccc; padding: 8px;">{{ row['tipo'] }}</td>
+        <td style="border: 1px solid #ccc; padding: 8px;">{{ row['localizacao'] }}</td>
+        <td style="border: 1px solid #ccc; padding: 8px;">{{ row['status'] }}</td>
+        <td style="border: 1px solid #ccc; padding: 8px;">{{ row['marca'] }}</td>
+        <td style="border: 1px solid #ccc; padding: 8px;">{{ row['modelo'] }}</td>
+        <td style="text-align: center;">
+          {% if row['termo_pdf_path'] %}
+            <!-- Se já tiver termo, mostrar botão para abrir o PDF -->
+            <a href="{{ url_for('ver_termo', id_publico=row['id_publico']) }}"
+               target="_blank"
+               class="btn"
+               style="background-color: #4CAF50; color: white; padding: 5px 10px; border-radius: 4px;">
+               📄 Visualizar Termo
+            </a>
+          {% else %}
+            <!-- Se ainda não tiver, mostrar botão de upload -->
+            <a href="{{ url_for('upload_termo', id_publico=row['id_publico']) }}"
+               class="btn"
+               style="background-color: #2196F3; color: white; padding: 5px 10px; border-radius: 4px;">
+               ⬆️ Upload Termo
+            </a>
+          {% endif %}
+        </td>        
+            Upload Termo
+          </a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
