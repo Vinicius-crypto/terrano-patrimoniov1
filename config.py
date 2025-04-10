@@ -24,3 +24,4 @@ class DevelopmentConfig(Config):
 
 class ProductionConfig(Config):
     DEBUG = False
+    # Último deploy: {10-04-2025 e 20:37}
