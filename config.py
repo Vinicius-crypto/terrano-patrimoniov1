@@ -6,7 +6,7 @@ class Config:
     if os.environ.get("FLASK_ENV") == "production":
         SQLALCHEMY_DATABASE_URI = os.environ.get(
             "DATABASE_URL",
-            "postgresql://uahaqxdyim:XFmkbizvA2gL@terrano-patrimonio-server.postgres.database.azure.com:5432/postgres"
+            "postgresql://vinicius@terrano-patrimonio-server:XFmkbizvA2gL@terrano-patrimonio-server.postgres.database.azure.com:5432/terrano-patrimonio-database"
         )
     else:
         SQLALCHEMY_DATABASE_URI = "sqlite:///db.sqlite3"
