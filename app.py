@@ -14,10 +14,16 @@ from email.mime.multipart import MIMEMultipart
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user, UserMixin
+from datetime import datetime
 
 # ============= INICIALIZAÇÃO =============
+from config import ProductionConfig, DevelopmentConfig
+
 app = Flask(__name__)
-app.config.from_object('ProductionConfig' if os.environ.get('FLASK_ENV') == 'production' else 'DevelopmentConfig')
+app.config.from_object(ProductionConfig if os.environ.get('FLASK_ENV') == 'production' else DevelopmentConfig)
+
+
+
 
 # Correção para PostgreSQL no Azure
 if app.config['SQLALCHEMY_DATABASE_URI'].startswith('postgres://'):
@@ -53,6 +59,19 @@ class Equipamento(db.Model):
     termo_pdf_path = db.Column(db.String(500))
 
 # ============= CONFIGURAÇÕES =============
+@app.before_request
+def criar_admin_uma_vez():
+    if not hasattr(app, 'admin_criado'):
+        if not Usuario.query.filter_by(username='admin').first():
+            hash_senha = bcrypt.hashpw('admin123'.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+            admin = Usuario(username='admin', password_hash=hash_senha, nivel_acesso=3)
+            db.session.add(admin)
+            db.session.commit()
+            print("Usuário admin criado: admin / admin123")
+        app.admin_criado = True
+
+
+
 @login_manager.user_loader
 def load_user(user_id):
     return Usuario.query.get(int(user_id))
@@ -61,6 +80,11 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() == 'pdf'
 
 # ============= ROTAS =============
+@app.route('/index')
+def index():
+    return redirect(url_for('home'))
+
+
 @app.route('/')
 @login_required
 def home():
@@ -323,9 +347,15 @@ def enviar_email_solicitacao(nome, departamento, email_usuario):
         print(f"Erro no envio de e-mail: {e}")
         return False
 
+@app.context_processor
+def inject_now():
+    return {'datetime': datetime}
+
 # ============= INICIALIZAÇÃO DO BANCO =============
 with app.app_context():
     db.create_all()
+
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
