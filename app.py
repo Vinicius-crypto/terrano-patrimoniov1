@@ -355,5 +355,3 @@ def inject_now():
 # ============= INICIALIZAÇÃO DO BANCO =============
 with app.app_context():
     db.create_all()
-
-from routes import *
