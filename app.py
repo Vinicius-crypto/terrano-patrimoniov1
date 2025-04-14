@@ -16,6 +16,7 @@ from flask_migrate import Migrate
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user, UserMixin
 from datetime import datetime
 
+
 # ============= INICIALIZAÇÃO =============
 from config import ProductionConfig, DevelopmentConfig
 
@@ -355,7 +356,4 @@ def inject_now():
 with app.app_context():
     db.create_all()
 
-
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
+from routes import *
