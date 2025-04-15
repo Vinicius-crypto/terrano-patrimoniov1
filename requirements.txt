@@ -1,9 +1,9 @@
 Flask
-Flask-SQLAlchemy
-Flask-Migrate
-Flask-Login
-bcrypt
+gunicorn
 pandas
 reportlab
-gunicorn
-psycopg2-binary
+flask_sqlalchemy
+flask_migrate
+flask_login
+bcrypt
+email-validator
