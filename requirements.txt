@@ -1,9 +1,7 @@
-Flask
-gunicorn
-pandas
-reportlab
-flask_sqlalchemy
-flask_migrate
-flask_login
-bcrypt
-email-validator
+Flask==2.3.3
+gunicorn==21.2.0
+pandas==2.2.1
+reportlab==4.1.0
+bcrypt==4.1.2
+flask_sqlalchemy==3.1.1
+flask_login==0.6.3
