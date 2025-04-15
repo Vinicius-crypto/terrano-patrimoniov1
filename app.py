@@ -155,30 +155,35 @@ def cadastrar():
             if ultimo:
                 novo_id = ultimo.id_interno + 1
             id_publico = f"PAT-{novo_id:03d}"
-            
+
+            # Tratamento da data de última manutenção (pode estar vazia)
+            ultima_manutencao = request.form['ultima_manutencao']
+            ultima_manutencao = datetime.strptime(ultima_manutencao, '%d-%m-%Y') if ultima_manutencao else None
+
             novo_equipamento = Equipamento(
                 id_publico=id_publico,
                 tipo=request.form['tipo'],
                 marca=request.form['marca'],
                 modelo=request.form['modelo'],
                 num_serie=request.form['num_serie'],
-                data_aquisicao=datetime.strptime(request.form['data_aquisicao'], '%Y-%m-%d'),
+                data_aquisicao=datetime.strptime(request.form['data_aquisicao'], '%d-%m-%Y'),
                 localizacao=request.form['localizacao'],
                 status=request.form['status'],
                 responsavel=request.form['responsavel'],
+                ultima_manutencao=ultima_manutencao,
                 valor=float(request.form['valor']) if request.form['valor'] else 0.0,
                 SPE=request.form['SPE'],
                 observacoes=request.form['observacoes']
             )
-            
+
             db.session.add(novo_equipamento)
             db.session.commit()
-            flash(f"Equipamento {id_publico} cadastrado!", "success")
+            flash(f"Equipamento {id_publico} cadastrado com sucesso!", "success")
             return redirect(url_for('home'))
         except Exception as e:
             db.session.rollback()
             flash("Erro ao cadastrar equipamento!", "error")
-            print(f"Erro: {e}")
+            print(f"Erro ao cadastrar equipamento: {e}")
     return render_template('cadastro_equipamento.html')
 
 @app.route('/consulta', methods=['GET', 'POST'])
