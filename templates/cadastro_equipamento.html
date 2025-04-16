@@ -1,60 +1,57 @@
 {% extends "base.html" %}
+{% block title %}Cadastrar Equipamento{% endblock %}
 {% block content %}
-<div class="container mt-5 d-flex justify-content-center">
-  <div class="card p-4 shadow w-100" style="max-width: 700px;">
-    <h2 class="mb-4">Cadastrar Equipamento</h2>
-    <form method="POST" action="{{ url_for('cadastrar') }}">
-      <div class="form-group">
-        <label for="tipo">Tipo</label>
-        <input type="text" class="form-control" name="tipo" required>
-      </div>
-      <div class="form-group">
-        <label for="marca">Marca</label>
-        <input type="text" class="form-control" name="marca" required>
-      </div>
-      <div class="form-group">
-        <label for="modelo">Modelo</label>
-        <input type="text" class="form-control" name="modelo" required>
-      </div>
-      <div class="form-group">
-        <label for="num_serie">Número de Série</label>
-        <input type="text" class="form-control" name="num_serie" required>
-      </div>
-      <div class="col-md-6 mb-3">
-        <label for="data_aquisicao" class="form-label">Data de Aquisição</label>
-        <input type="date" class="form-control" id="data_aquisicao" name="data_aquisicao" required>
-      </div>
-      <div class="col-md-6 mb-3">
-        <label for="ultima_manutencao" class="form-label">Última Manutenção</label>
-        <input type="date" class="form-control" id="ultima_manutencao" name="ultima_manutencao">
-      </div>
-      <div class="form-group">
-        <label for="localizacao">Localização</label>
-        <input type="text" class="form-control" name="localizacao" required>
-      </div>
-      <div class="form-group">
-        <label for="status">Status</label>
-        <input type="text" class="form-control" name="status" required>
-      </div>
-      <div class="form-group">
-        <label for="responsavel">Responsável</label>
-        <input type="text" class="form-control" name="responsavel" required>
-      </div>
-      <div class="form-group">
-        <label for="valor">Valor</label>
-        <input type="number" step="0.01" class="form-control" name="valor">
-      </div>
-      <div class="form-group">
-        <label for="SPE">SPE</label>
-        <input type="text" class="form-control" name="SPE">
-      </div>
-      <div class="form-group">
-        <label for="observacoes">Observações</label>
-        <textarea class="form-control" name="observacoes"></textarea>
-      </div>
-      <button type="submit" class="btn btn-success mt-3">Cadastrar</button>
+<div class="page-container">
+  <div class="form-container">
+    <h2>Cadastrar Equipamento</h2>
+    <form method="post">
+      <label for="tipo">Tipo:</label>
+      <select name="tipo" id="tipo" required>
+        <option value="Notebook">Notebook</option>
+        <option value="Celular">Celular</option>
+        <option value="DVR">DVR</option>
+        <option value="Outro">Outro</option>
+      </select>
+
+      <label for="marca">Marca:</label>
+      <input type="text" name="marca" id="marca" required>
+
+      <label for="modelo">Modelo:</label>
+      <input type="text" name="modelo" id="modelo" required>
+
+      <label for="num_serie">Número de Série:</label>
+      <input type="text" name="num_serie" id="num_serie" required>
+
+      <label for="data_aquisicao">Data de Aquisição:</label>
+      <input type="date" name="data_aquisicao" id="data_aquisicao" required>
+
+      <label for="localizacao">Localização:</label>
+      <input type="text" name="localizacao" id="localizacao" required>
+
+      <label for="status">Status:</label>
+      <select name="status" id="status" required>
+        <option value="Estocado">Estocado</option>
+        <option value="Em uso">Em uso</option>
+        <option value="Manutenção">Manutenção</option>
+      </select>
+
+      <label for="responsavel">Responsável:</label>
+      <input type="text" name="responsavel" id="responsavel">
+
+      <label for="ultima_manutencao">Última Manutenção:</label>
+      <input type="date" name="ultima_manutencao" id="ultima_manutencao">
+
+      <label for="valor">Valor R$:</label>
+      <input type="text" name="valor" id="valor">
+
+      <label for="observacoes">Observações:</label>
+      <input type="text" name="observacoes" id="observacoes">
+
+      <label for="SPE">SPE:</label>
+      <input type="text" name="SPE" id="SPE">
+
+      <button type="submit">Cadastrar</button>
     </form>
   </div>
 </div>
 {% endblock %}
-
