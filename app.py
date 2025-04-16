@@ -27,8 +27,9 @@ app.config.from_object(ProductionConfig if os.environ.get('FLASK_ENV') == 'produ
 
 
 # Correção para PostgreSQL no Azure
-if app.config['SQLALCHEMY_DATABASE_URI'].startswith('postgres://'):
-    app.config['SQLALCHEMY_DATABASE_URI'] = app.config['SQLALCHEMY_DATABASE_URI'].replace('postgres://', 'postgresql://', 1)
+uri = app.config.get('SQLALCHEMY_DATABASE_URI')
+if uri and uri.startswith('postgres://'):
+    app.config['SQLALCHEMY_DATABASE_URI'] = uri.replace('postgres://', 'postgresql://', 1)
 
 UPLOAD_FOLDER = app.config.get("UPLOAD_FOLDER") or "uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
@@ -164,8 +165,8 @@ def cadastrar():
             if ultimo:
                 novo_id = ultimo.id_interno + 1
             id_publico = f"PAT-{novo_id:03d}"
-            nova_data_aquisicao = datetime.strptime(request.form['data_aquisicao'], '%d-%m-%Y')
-            nova_ultima_manutencao = datetime.strptime(request.form['ultima_manutencao'], '%d-%m-%Y') if request.form['ultima_manutencao'] else None
+            nova_data_aquisicao = datetime.strptime(request.form['data_aquisicao'], '%Y-%m-%d')
+            nova_ultima_manutencao = datetime.strptime(request.form['ultima_manutencao'], '%Y-%m-%d') if request.form['ultima_manutencao'] else None
             novo_equipamento = Equipamento(
                 id_publico=id_publico,
                 tipo=request.form['tipo'],

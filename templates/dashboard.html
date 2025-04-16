@@ -28,6 +28,11 @@
   <a href="{{ url_for('gerar_pdf') }}" class="btn" style="padding: 0.6em 1.2em; background-color: #2b4f2f; color: white; border-radius: 8px; text-decoration: none;">
     Gerar PDF
   </a>
+  {% if current_user.is_authenticated and current_user.nivel_acesso == 3 %}
+  <a href="{{ url_for('cadastro_usuario') }}" class="btn" style="padding: 0.6em 1.2em; background-color: #2b4f2f; color: white; border-radius: 8px; text-decoration: none;">
+    Cadastrar Usuário
+  </a>
+  {% endif %}
   <a href="{{ url_for('logout') }}" class="btn" style="padding: 0.6em 1.2em; background-color: #444; color: white; border-radius: 8px; text-decoration: none;">
     Sair
   </a>
