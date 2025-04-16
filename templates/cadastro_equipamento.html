@@ -1,62 +1,60 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md mt-10">
-  <h1 class="text-2xl font-bold mb-6 text-center">Cadastro de Equipamento</h1>
-  <form method="POST">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div>
-        <label for="tipo" class="block text-sm font-medium text-gray-700">Tipo:</label>
-        <input type="text" id="tipo" name="tipo" class="w-full border rounded px-3 py-2" required>
+<div class="container mt-5 d-flex justify-content-center">
+  <div class="card p-4 shadow w-100" style="max-width: 700px;">
+    <h2 class="mb-4">Cadastrar Equipamento</h2>
+    <form method="POST" action="{{ url_for('cadastrar') }}">
+      <div class="form-group">
+        <label for="tipo">Tipo</label>
+        <input type="text" class="form-control" name="tipo" required>
       </div>
-      <div>
-        <label for="marca" class="block text-sm font-medium text-gray-700">Marca:</label>
-        <input type="text" id="marca" name="marca" class="w-full border rounded px-3 py-2">
+      <div class="form-group">
+        <label for="marca">Marca</label>
+        <input type="text" class="form-control" name="marca" required>
       </div>
-      <div>
-        <label for="modelo" class="block text-sm font-medium text-gray-700">Modelo:</label>
-        <input type="text" id="modelo" name="modelo" class="w-full border rounded px-3 py-2">
+      <div class="form-group">
+        <label for="modelo">Modelo</label>
+        <input type="text" class="form-control" name="modelo" required>
       </div>
-      <div>
-        <label for="num_serie" class="block text-sm font-medium text-gray-700">Número de Série:</label>
-        <input type="text" id="num_serie" name="num_serie" class="w-full border rounded px-3 py-2">
+      <div class="form-group">
+        <label for="num_serie">Número de Série</label>
+        <input type="text" class="form-control" name="num_serie" required>
       </div>
-      <div>
-        <label for="data_aquisicao" class="block text-sm font-medium text-gray-700">Data de Aquisição:</label>
-        <input type="date" id="data_aquisicao" name="data_aquisicao" class="w-full border rounded px-3 py-2">
+      <div class="form-group">
+        <label for="data_aquisicao">Data de Aquisição</label>
+        <input type="text" class="form-control" name="data_aquisicao" placeholder="DD-MM-AAAA" required>
       </div>
-      <div>
-        <label for="ultima_manutencao" class="block text-sm font-medium text-gray-700">Última Manutenção:</label>
-        <input type="date" id="ultima_manutencao" name="ultima_manutencao" class="w-full border rounded px-3 py-2">
+      <div class="form-group">
+        <label for="ultima_manutencao">Última Manutenção</label>
+        <input type="text" class="form-control" name="ultima_manutencao" placeholder="DD-MM-AAAA">
       </div>
-      <div class="md:col-span-2">
-        <label for="localizacao" class="block text-sm font-medium text-gray-700">Localização:</label>
-        <input type="text" id="localizacao" name="localizacao" class="w-full border rounded px-3 py-2">
+      <div class="form-group">
+        <label for="localizacao">Localização</label>
+        <input type="text" class="form-control" name="localizacao" required>
       </div>
-      <div>
-        <label for="status" class="block text-sm font-medium text-gray-700">Status:</label>
-        <input type="text" id="status" name="status" class="w-full border rounded px-3 py-2">
+      <div class="form-group">
+        <label for="status">Status</label>
+        <input type="text" class="form-control" name="status" required>
       </div>
-      <div>
-        <label for="responsavel" class="block text-sm font-medium text-gray-700">Responsável:</label>
-        <input type="text" id="responsavel" name="responsavel" class="w-full border rounded px-3 py-2">
+      <div class="form-group">
+        <label for="responsavel">Responsável</label>
+        <input type="text" class="form-control" name="responsavel" required>
       </div>
-      <div>
-        <label for="valor" class="block text-sm font-medium text-gray-700">Valor:</label>
-        <input type="number" id="valor" name="valor" step="0.01" class="w-full border rounded px-3 py-2">
+      <div class="form-group">
+        <label for="valor">Valor</label>
+        <input type="number" step="0.01" class="form-control" name="valor">
       </div>
-      <div>
-        <label for="SPE" class="block text-sm font-medium text-gray-700">SPE:</label>
-        <input type="text" id="SPE" name="SPE" class="w-full border rounded px-3 py-2">
+      <div class="form-group">
+        <label for="SPE">SPE</label>
+        <input type="text" class="form-control" name="SPE">
       </div>
-      <div class="md:col-span-2">
-        <label for="observacoes" class="block text-sm font-medium text-gray-700">Observações:</label>
-        <textarea id="observacoes" name="observacoes" rows="4" class="w-full border rounded px-3 py-2"></textarea>
+      <div class="form-group">
+        <label for="observacoes">Observações</label>
+        <textarea class="form-control" name="observacoes"></textarea>
       </div>
-    </div>
-    <div class="mt-6 text-center">
-      <button type="submit" class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">Cadastrar</button>
-    </div>
-  </form>
+      <button type="submit" class="btn btn-success mt-3">Cadastrar</button>
+    </form>
+  </div>
 </div>
 {% endblock %}
 
