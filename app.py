@@ -40,6 +40,7 @@ migrate = Migrate(app, db)
 login_manager = LoginManager(app)
 login_manager.login_view = "login"
 login_manager.login_message = "Por favor, faça login para acessar esta página."
+login_manager.login_message_category = "error"
 
 # ============= MODELOS =============
 class Usuario(db.Model, UserMixin):
@@ -78,11 +79,6 @@ def criar_admin_uma_vez():
         app.admin_criado = True
 
 # ============= LOGIN MANAGER ============= 
-
-login_manager = LoginManager(app)
-login_manager.login_view = "login"
-login_manager.login_message = "Por favor, faça login para acessar esta página."
-login_manager.login_message_category = "error"
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -337,14 +333,14 @@ def solicitar_acesso():
 # ============= FUNÇÕES AUXILIARES =============
 def enviar_email_solicitacao(nome, departamento, email_usuario):
     try:
-        remetente = os.environ.get('EMAIL_USER')
-        senha = os.environ.get('EMAIL_PASSWORD')
-        
+        remetente = os.environ.get('EMAIL_USER')  # seu endereço Gmail
+        senha = os.environ.get('EMAIL_PASSWORD')  # senha do app (não a sua senha normal)
+
         msg = MIMEMultipart()
         msg['From'] = remetente
-        msg['To'] = remetente  # Envia para o admin
+        msg['To'] = remetente  # enviar para si mesmo ou para o admin
         msg['Subject'] = "Nova Solicitação de Acesso"
-        
+
         corpo = f"""
         Nova solicitação de acesso:
         Nome: {nome}
@@ -352,11 +348,12 @@ def enviar_email_solicitacao(nome, departamento, email_usuario):
         E-mail: {email_usuario}
         """
         msg.attach(MIMEText(corpo, 'plain'))
-        
-        with smtplib.SMTP('smtp.office365.com', 587) as server:
+
+        with smtplib.SMTP('smtp.gmail.com', 587) as server:
             server.starttls()
             server.login(remetente, senha)
             server.sendmail(remetente, remetente, msg.as_string())
+
         return True
     except Exception as e:
         print(f"Erro no envio de e-mail: {e}")
