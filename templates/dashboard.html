@@ -6,7 +6,7 @@
   <!-- Exibir o logotipo -->
   <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" class="logo" style="width: 120px; height: auto; margin-bottom: 1em;">
   
-  <h1>Bem-vindo, {{ session.username }}!</h1>
+  <h1>Bem-vindo {{ session.username }}!</h1>
   <p>Gerencie seus equipamentos e acesse as funcionalidades abaixo:</p>
   
 <div style="

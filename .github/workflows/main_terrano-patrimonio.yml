@@ -21,9 +21,15 @@ jobs:
           docker build -t viniciuscrypto1/terrano-backend-v2:latest .
           docker push viniciuscrypto1/terrano-backend-v2:latest
 
-      - name: Deploy no Azure App Service
+      - name: Login no Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Deploy no Azure App Service com imagem Docker
         uses: azure/webapps-deploy@v2
         with:
           app-name: terrano-backend-v2
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          images: 'viniciuscrypto1/terrano-backend-v2:latest'
+          images: viniciuscrypto1/terrano-backend-v2:latest
+
+      
