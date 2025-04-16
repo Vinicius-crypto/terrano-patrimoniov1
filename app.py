@@ -30,10 +30,16 @@ app.config.from_object(ProductionConfig if os.environ.get('FLASK_ENV') == 'produ
 if app.config['SQLALCHEMY_DATABASE_URI'].startswith('postgres://'):
     app.config['SQLALCHEMY_DATABASE_URI'] = app.config['SQLALCHEMY_DATABASE_URI'].replace('postgres://', 'postgresql://', 1)
 
+UPLOAD_FOLDER = app.config.get("UPLOAD_FOLDER") or "uploads"
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 login_manager = LoginManager(app)
 login_manager.login_view = "login"
+login_manager.login_message = "Por favor, faça login para acessar esta página."
 
 # ============= MODELOS =============
 class Usuario(db.Model, UserMixin):
@@ -71,12 +77,19 @@ def criar_admin_uma_vez():
             print("Usuário admin criado: admin / admin123")
         app.admin_criado = True
 
+# ============= LOGIN MANAGER ============= 
 
+login_manager = LoginManager(app)
+login_manager.login_view = "login"
+login_manager.login_message = "Por favor, faça login para acessar esta página."
+login_manager.login_message_category = "error"
 
 @login_manager.user_loader
 def load_user(user_id):
     return Usuario.query.get(int(user_id))
 
+# =========================================     
+    
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() == 'pdf'
 
@@ -155,27 +168,23 @@ def cadastrar():
             if ultimo:
                 novo_id = ultimo.id_interno + 1
             id_publico = f"PAT-{novo_id:03d}"
-
-            # Tratamento da data de última manutenção (pode estar vazia)
-            ultima_manutencao = request.form['ultima_manutencao']
-            ultima_manutencao = datetime.strptime(ultima_manutencao, '%d-%m-%Y') if ultima_manutencao else None
-
+            nova_data_aquisicao = datetime.strptime(request.form['data_aquisicao'], '%d-%m-%Y')
+            nova_ultima_manutencao = datetime.strptime(request.form['ultima_manutencao'], '%d-%m-%Y') if request.form['ultima_manutencao'] else None
             novo_equipamento = Equipamento(
                 id_publico=id_publico,
                 tipo=request.form['tipo'],
                 marca=request.form['marca'],
                 modelo=request.form['modelo'],
                 num_serie=request.form['num_serie'],
-                data_aquisicao=datetime.strptime(request.form['data_aquisicao'], '%d-%m-%Y'),
+                data_aquisicao=nova_data_aquisicao,
+                ultima_manutencao=nova_ultima_manutencao,
                 localizacao=request.form['localizacao'],
                 status=request.form['status'],
                 responsavel=request.form['responsavel'],
-                ultima_manutencao=ultima_manutencao,
                 valor=float(request.form['valor']) if request.form['valor'] else 0.0,
                 SPE=request.form['SPE'],
                 observacoes=request.form['observacoes']
             )
-
             db.session.add(novo_equipamento)
             db.session.commit()
             flash(f"Equipamento {id_publico} cadastrado com sucesso!", "success")
@@ -183,7 +192,7 @@ def cadastrar():
         except Exception as e:
             db.session.rollback()
             flash("Erro ao cadastrar equipamento!", "error")
-            print(f"Erro ao cadastrar equipamento: {e}")
+            print(f"Erro: {e}")
     return render_template('cadastro_equipamento.html')
 
 @app.route('/consulta', methods=['GET', 'POST'])
