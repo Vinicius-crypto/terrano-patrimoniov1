@@ -35,7 +35,7 @@
         <td style="text-align: center;">
           {% if row['termo_pdf_path'] %}
             <!-- Se já tiver termo, mostrar botão para abrir o PDF -->
-            <a href="{{ url_for('ver_termo', id_publico=row['id_publico']) }}"
+            <a href="{{ url_for('ver_termo', id_publico=equipamento.id_publico) }}"
                target="_blank"
                class="btn"
                style="background-color: #4CAF50; color: white; padding: 5px 10px; border-radius: 4px;">
@@ -43,7 +43,7 @@
             </a>
           {% else %}
             <!-- Se ainda não tiver, mostrar botão de upload -->
-            <a href="{{ url_for('upload_termo', id_publico=row['id_publico']) }}"
+            <a href="{{ url_for('upload_termo', id_publico=equipamento.id_publico) }}"
                class="btn"
                style="background-color: #2196F3; color: white; padding: 5px 10px; border-radius: 4px;">
                ⬆️ Upload Termo
