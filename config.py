@@ -6,7 +6,7 @@ class Config:
     SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-    UPLOAD_FOLDER = os.path.join(os.getenv('HOME', ''), 'site/wwwroot/uploads/termos')
+    UPLOAD_FOLDER = os.path.join(os.getcwd(), 'uploads/termos')
 
 class DevelopmentConfig(Config):
     DEBUG = True

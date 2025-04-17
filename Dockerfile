@@ -2,6 +2,9 @@ FROM python:3.12-slim
 
 WORKDIR /app
 
+RUN mkdir -p /app/uploads/termos
+COPY uploads/ uploads/
+
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 
