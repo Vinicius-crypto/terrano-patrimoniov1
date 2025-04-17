@@ -11,14 +11,10 @@
     
     <!-- Cabeçalho com logo e navegação -->
     <header class="bg-blue-600 dark:bg-blue-800 shadow p-4 flex items-center justify-between">
-      <!-- Bloco com logo e título -->
       <div class="flex items-center gap-4">
-        <!-- Logo -->
         <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" class="logo" />
-        <!-- Título do site -->
         <h1 class="text-2xl font-bold text-white">Controle de Patrimônio</h1>
       </div>
-      <!-- Menu de navegação -->
       <nav class="space-x-4">
         <a href="{{ url_for('index') }}" class="text-white hover:underline">Home</a> |
         {% if session.username %}
@@ -29,6 +25,24 @@
       </nav>
     </header>
 
+    <!-- Bloco de mensagens flash -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="max-w-4xl mx-auto mt-6">
+          {% for category, message in messages %}
+            <div class="p-4 rounded-md mb-4
+              {% if category == 'success' %} bg-green-100 text-green-800 border border-green-300
+              {% elif category == 'error' %} bg-red-100 text-red-800 border border-red-300
+              {% else %} bg-gray-100 text-gray-800 border border-gray-300
+              {% endif %}">
+              {{ message }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <!-- Conteúdo principal -->
     <main class="p-6">
       {% block content %}{% endblock %}
     </main>
@@ -39,4 +53,3 @@
     
   </body>
 </html>
-

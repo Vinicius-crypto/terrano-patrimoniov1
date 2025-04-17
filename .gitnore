@@ -22,3 +22,6 @@ Thumbs.db
 
 # Uploads
 site/wwwroot/uploads/termos/
+
+# Migração do banco de dados
+C:\Users\Vinicius\Projetos\Terrano-patrimonio\migrar_sqlite_para_postgres.py
