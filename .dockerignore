@@ -1,0 +1,10 @@
+patrimonio.db
+migrar_sqlite_para_postgres.py
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+*.db
+uploads/
+.env
+*.sqlite
