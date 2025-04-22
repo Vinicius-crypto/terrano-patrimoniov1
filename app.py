@@ -15,6 +15,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user, UserMixin
 from datetime import datetime
+from azure.storage.blob import BlobServiceClient
+from io import BytesIO
 
 
 # ============= INICIALIZAÇÃO =============
@@ -40,6 +42,19 @@ UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), 'uploads', 'termos')
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+# Configuração do Azure Blob Storage
+BLOB_CONTAINER = 'termos'
+blob_connection_string = os.getenv("AZURE_STORAGE_CONNECTION_STRING")
+
+if not blob_connection_string:
+    raise RuntimeError("AZURE_STORAGE_CONNECTION_STRING não definida!")
+
+blob_service_client = BlobServiceClient.from_connection_string(blob_connection_string)
+container_client = blob_service_client.get_container_client(BLOB_CONTAINER)
+try:
+    container_client.create_container()
+except Exception:
+    pass  # container já existe
 
 
 db = SQLAlchemy(app)
@@ -301,13 +316,12 @@ def upload_termo(id_publico):
                 return redirect(request.url)
 
             if allowed_file(arquivo.filename):
-                filename = secure_filename(arquivo.filename)
-                caminho = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-                arquivo.save(caminho)
-
                 equipamento = Equipamento.query.filter_by(id_publico=id_publico).first()
                 if equipamento:
-                    equipamento.termo_pdf_path = caminho
+                    filename = f"{id_publico}.pdf"
+                    blob_client = container_client.get_blob_client(filename)
+                    blob_client.upload_blob(arquivo, overwrite=True)
+                    equipamento.termo_pdf_path = filename
                     db.session.commit()
                     flash("Termo salvo com sucesso!", "success")
                     return redirect(url_for('consulta'))
@@ -315,7 +329,6 @@ def upload_termo(id_publico):
                     flash("Equipamento não encontrado!", "error")
             else:
                 flash("Somente arquivos PDF são permitidos!", "error")
-
         except Exception as e:
             flash(f"Erro inesperado ao salvar termo: {str(e)}", "error")
             print(f"Erro no upload: {e}")
@@ -323,18 +336,22 @@ def upload_termo(id_publico):
 
     return render_template('upload_termo.html', id_publico=id_publico)
 
+
 @app.route('/ver_termo/<string:id_publico>')
 @login_required
 def ver_termo(id_publico):
     equipamento = Equipamento.query.filter_by(id_publico=id_publico).first()
     if equipamento and equipamento.termo_pdf_path:
         try:
-            return send_file(equipamento.termo_pdf_path)
-        except FileNotFoundError:
+            blob_client = container_client.get_blob_client(equipamento.termo_pdf_path)
+            stream = blob_client.download_blob().readall()
+            return send_file(BytesIO(stream), download_name=equipamento.termo_pdf_path, mimetype='application/pdf')
+        except Exception:
             flash("Arquivo do termo não encontrado!", "error")
     else:
         flash("Termo não disponível para este equipamento.", "error")
     return redirect(url_for('consulta'))
+
 
 @app.route('/solicitar_acesso', methods=['GET', 'POST'])
 def solicitar_acesso():
