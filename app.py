@@ -316,7 +316,7 @@ def upload_termo(id_publico):
 @login_required
 def ver_termo(id_publico):
     equipamento = Equipamento.query.filter_by(id_publico=id_publico).first()
-    if equipamento and equipamento.termo_pdf_path:
+    if equipamento and equipamento.termo_pdf_path and os.path.exists(equipamento.termo_pdf_path):
         return send_file(equipamento.termo_pdf_path)
     flash("Termo não encontrado!", "error")
     return redirect(url_for('consulta'))

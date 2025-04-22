@@ -34,20 +34,11 @@
         <td style="border: 1px solid #ccc; padding: 8px;">{{ equipamento.marca }}</td>
         <td style="border: 1px solid #ccc; padding: 8px;">{{ equipamento.modelo }}</td>
         <td style="border: 1px solid #ccc; padding: 8px; text-align: center;">
-          {% if equipamento.termo_pdf_path %}
-            <a href="{{ url_for('ver_termo', id_publico=equipamento.id_publico) }}"
-               target="_blank"
-               class="btn"
-               style="background-color: #4CAF50; color: white; padding: 5px 10px; border-radius: 4px;">
-               📄 Visualizar Termo
-            </a>
+          {% if equipamento.termo_pdf_path and equipamento.termo_pdf_path != 'None' %}
+            <a href="{{ url_for('ver_termo', id_publico=equipamento.id_publico) }}" ...>📄 Visualizar Termo</a>
           {% else %}
-            <a href="{{ url_for('upload_termo', id_publico=equipamento.id_publico) }}"
-               class="btn"
-               style="background-color: #2196F3; color: white; padding: 5px 10px; border-radius: 4px;">
-               ⬆️ Upload Termo
-            </a>
-          {% endif %}
+            <a href="{{ url_for('upload_termo', id_publico=equipamento.id_publico) }}" ...>⬆️ Upload Termo</a>
+          {% endif %}        
         </td>
       </tr>
       {% endfor %}
