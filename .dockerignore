@@ -7,3 +7,6 @@ __pycache__
 *.db
 .env
 *.sqlite
+# Ignora os PDFs, mas mantém a pasta com o .gitkeep
+uploads/termos/*
+!uploads/termos/.gitkeep

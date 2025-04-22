@@ -35,10 +35,12 @@ uri = app.config.get('SQLALCHEMY_DATABASE_URI')
 if uri and uri.startswith('postgres://'):
     app.config['SQLALCHEMY_DATABASE_URI'] = uri.replace('postgres://', 'postgresql://', 1)
 
-UPLOAD_FOLDER = app.config.get("UPLOAD_FOLDER") or "uploads"
+# Caminho relativo ao diretório do app
+UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), 'uploads', 'termos')
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+
 
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
@@ -288,37 +290,50 @@ def gerar_pdf():
 @login_required
 def upload_termo(id_publico):
     if request.method == 'POST':
-        if 'termo_pdf' not in request.files:
-            flash("Nenhum arquivo selecionado!", "error")
+        try:
+            if 'termo_pdf' not in request.files:
+                flash("Nenhum arquivo foi enviado!", "error")
+                return redirect(request.url)
+
+            arquivo = request.files['termo_pdf']
+            if not arquivo or arquivo.filename == '':
+                flash("Arquivo inválido!", "error")
+                return redirect(request.url)
+
+            if allowed_file(arquivo.filename):
+                filename = secure_filename(arquivo.filename)
+                caminho = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                arquivo.save(caminho)
+
+                equipamento = Equipamento.query.filter_by(id_publico=id_publico).first()
+                if equipamento:
+                    equipamento.termo_pdf_path = caminho
+                    db.session.commit()
+                    flash("Termo salvo com sucesso!", "success")
+                    return redirect(url_for('consulta'))
+                else:
+                    flash("Equipamento não encontrado!", "error")
+            else:
+                flash("Somente arquivos PDF são permitidos!", "error")
+
+        except Exception as e:
+            flash(f"Erro inesperado ao salvar termo: {str(e)}", "error")
+            print(f"Erro no upload: {e}")
             return redirect(request.url)
-            
-        arquivo = request.files['termo_pdf']
-        if arquivo.filename == '':
-            flash("Nome de arquivo inválido!", "error")
-            return redirect(request.url)
-            
-        if arquivo and allowed_file(arquivo.filename):
-            filename = secure_filename(arquivo.filename)
-            caminho = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            arquivo.save(caminho)
-            
-            equipamento = Equipamento.query.filter_by(id_publico=id_publico).first()
-            if equipamento:
-                equipamento.termo_pdf_path = caminho
-                db.session.commit()
-                flash("Termo salvo com sucesso!", "success")
-                return redirect(url_for('consulta'))
-        else:
-            flash("Apenas arquivos PDF são permitidos!", "error")
+
     return render_template('upload_termo.html', id_publico=id_publico)
 
 @app.route('/ver_termo/<string:id_publico>')
 @login_required
 def ver_termo(id_publico):
     equipamento = Equipamento.query.filter_by(id_publico=id_publico).first()
-    if equipamento and equipamento.termo_pdf_path and os.path.exists(equipamento.termo_pdf_path):
-        return send_file(equipamento.termo_pdf_path)
-    flash("Termo não encontrado!", "error")
+    if equipamento and equipamento.termo_pdf_path:
+        try:
+            return send_file(equipamento.termo_pdf_path)
+        except FileNotFoundError:
+            flash("Arquivo do termo não encontrado!", "error")
+    else:
+        flash("Termo não disponível para este equipamento.", "error")
     return redirect(url_for('consulta'))
 
 @app.route('/solicitar_acesso', methods=['GET', 'POST'])
