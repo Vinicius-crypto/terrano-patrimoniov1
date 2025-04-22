@@ -27,6 +27,10 @@ app.config.from_object(ProductionConfig if os.environ.get('FLASK_ENV') == 'produ
 
 
 # Correção para PostgreSQL no Azure
+
+if not app.config.get('SQLALCHEMY_DATABASE_URI'):
+    raise RuntimeError("⚠️ DATABASE_URL não definida no ambiente!")
+
 uri = app.config.get('SQLALCHEMY_DATABASE_URI')
 if uri and uri.startswith('postgres://'):
     app.config['SQLALCHEMY_DATABASE_URI'] = uri.replace('postgres://', 'postgresql://', 1)
