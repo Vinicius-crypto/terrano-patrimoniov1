@@ -1,35 +1,31 @@
 {% extends "base.html" %}
-
 {% block content %}
-<div class="max-w-2xl mx-auto bg-white p-6 mt-10 rounded-lg shadow">
-  <h1 class="text-2xl font-bold mb-6 text-center">Cadastro de Usuário</h1>
+<div class="container" style="max-width: 600px; background-color: white; padding: 30px; margin-top: 40px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+  <h2 class="text-center mb-4">Cadastro de Usuário</h2>
+
   <form method="POST">
-    <div class="space-y-4">
-      <div>
-        <label for="username" class="block text-sm font-medium text-gray-700">Nome de Usuário:</label>
-        <input type="text" id="username" name="username" required class="w-full border rounded px-3 py-2">
-      </div>
-      <div>
-        <label for="senha" class="block text-sm font-medium text-gray-700">Senha:</label>
-        <input type="password" id="senha" name="senha" required class="w-full border rounded px-3 py-2">
-      </div>
-      <div>
-        <label for="confirmar" class="block text-sm font-medium text-gray-700">Confirmar Senha:</label>
-        <input type="password" id="confirmar" name="confirmar" required class="w-full border rounded px-3 py-2">
-      </div>
-      <div>
-        <label for="nivel" class="block text-sm font-medium text-gray-700">Nível de Acesso:</label>
-        <select id="nivel" name="nivel" class="w-full border rounded px-3 py-2">
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3 (Admin)</option>
-        </select>
-      </div>
+    <div class="mb-3">
+      <label for="username" class="form-label">Nome de Usuário:</label>
+      <input type="text" id="username" name="username" required class="form-control">
     </div>
-    <div class="mt-6 text-center">
-      <button type="submit" class="bg-green-700 hover:bg-green-800 text-white font-semibold px-6 py-2 rounded">
-        Cadastrar
-      </button>
+    <div class="mb-3">
+      <label for="senha" class="form-label">Senha:</label>
+      <input type="password" id="senha" name="senha" required class="form-control">
+    </div>
+    <div class="mb-3">
+      <label for="confirmar" class="form-label">Confirmar Senha:</label>
+      <input type="password" id="confirmar" name="confirmar" required class="form-control">
+    </div>
+    <div class="mb-4">
+      <label for="nivel" class="form-label">Nível de Acesso:</label>
+      <select id="nivel" name="nivel" class="form-select">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3 (Admin)</option>
+      </select>
+    </div>
+    <div class="text-center">
+      <button type="submit" class="btn btn-success">Cadastrar</button>
     </div>
   </form>
 </div>
