@@ -39,10 +39,10 @@
         <td style="border: 1px solid #ccc; padding: 8px;">{{ equipamento.modelo }}</td>
         <td style="border: 1px solid #ccc; padding: 8px; text-align: center;">
           {% if equipamento.termo_pdf_path and equipamento.termo_pdf_path != 'None' %}
-            <a href="{{ url_for('ver_termo', id_publico=equipamento.id_publico) }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-link text-primary" style="text-decoration: none;">📄 Visualizar Termo</a><br>
-            <a href="{{ url_for('upload_termo', id_publico=equipamento.id_publico) }}" class="btn btn-sm btn-link text-warning" style="text-decoration: none;">🔁 Substituir Termo</a>
+            <a href="{{ url_for('ver_termo', id_publico=equipamento.id_publico) }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-link text-primary" style="color: #007bff; text-decoration: none; background: none; border: none; box-shadow: none; padding: 0; margin: 0;">📄 Visualizar Termo</a><br>
+            <a href="{{ url_for('upload_termo', id_publico=equipamento.id_publico) }}" class="btn btn-sm btn-link text-warning" style="color: #ffc107; text-decoration: none; background: none; border: none; box-shadow: none; padding: 0; margin: 0;">🔁 Substituir Termo</a>
           {% else %}
-            <a href="{{ url_for('upload_termo', id_publico=equipamento.id_publico) }}" class="btn btn-sm btn-link text-secondary" style="text-decoration: none;">⬆️ Upload Termo</a>
+            <a href="{{ url_for('upload_termo', id_publico=equipamento.id_publico) }}" class="btn btn-sm btn-link text-secondary" style="color: #6c757d; text-decoration: none; background: none; border: none; box-shadow: none; padding: 0; margin: 0;">⬆️ Upload Termo</a>
           {% endif %}        
         </td>
       </tr>
