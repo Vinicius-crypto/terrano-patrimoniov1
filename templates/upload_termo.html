@@ -5,20 +5,33 @@
 <div class="container" style="max-width: 600px; margin: auto;">
   <h2 class="text-center mb-4">Upload do Termo de Uso</h2>
 
+  {% if termo_existe %}
+    <div style="background-color: #fff3cd; border: 1px solid #ffeeba; color: #856404; padding: 10px; border-radius: 5px; margin-bottom: 20px;">
+      ⚠️ Já existe um termo de uso salvo para esse equipamento.<br>
+      <strong>O novo arquivo irá substituir o anterior.</strong>
+    </div>
+  {% endif %}
+
   <form method="post" enctype="multipart/form-data">
     <div style="margin-bottom: 15px;">
-      <label for="termo_pdf">Selecione o arquivo PDF:</label>
+      <label for="termo_pdf"><strong>Selecione o arquivo PDF:</strong></label>
       <input type="file" name="termo_pdf" id="termo_pdf" accept="application/pdf" required
              style="display: block; margin-top: 5px; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
     </div>
 
     <div style="text-align: center;">
-      <button type="submit" class="btn" style="padding: 10px 20px;">Enviar</button>
+      <button type="submit" class="btn btn-primary" style="padding: 10px 20px;">
+        {% if termo_existe %}
+          Substituir Termo
+        {% else %}
+          Enviar Termo
+        {% endif %}
+      </button>
     </div>
   </form>
 
   <div class="text-center mt-3">
-    <a href="{{ url_for('consulta') }}" class="btn" style="margin-top: 10px;">Voltar</a>
+    <a href="{{ url_for('consulta') }}" class="btn btn-secondary" style="margin-top: 10px;">⬅️ Voltar</a>
   </div>
 </div>
 {% endblock %}

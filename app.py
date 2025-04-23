@@ -214,18 +214,27 @@ def cadastrar():
     return render_template('cadastro_equipamento.html')
 
 @app.route('/consulta', methods=['GET', 'POST'])
+@login_required
 def consulta():
-    resultados = []
-    busca = ""
-    if request.method == 'POST':
-        busca = request.form['busca']
-        resultados = Equipamento.query.filter(
+    busca = request.form.get('busca') if request.method == 'POST' else request.args.get('busca', '')
+    ordenacao = request.args.get('ordenacao', 'id_publico')
+
+    query = Equipamento.query
+    if busca:
+        query = query.filter(
             Equipamento.id_publico.ilike(f"%{busca}%") |
             Equipamento.tipo.ilike(f"%{busca}%") |
             Equipamento.marca.ilike(f"%{busca}%") |
             Equipamento.localizacao.ilike(f"%{busca}%")
-        ).all()
+        )
+
+    if ordenacao == 'id_publico':
+        query = query.order_by(Equipamento.id_publico.asc())  # ASC = crescente
+
+    resultados = query.all()
     return render_template('consulta.html', resultados=resultados, busca=busca)
+
+
 
 @app.route('/exportar_csv')
 @login_required
@@ -304,6 +313,8 @@ def gerar_pdf():
 @app.route('/upload_termo/<string:id_publico>', methods=['GET', 'POST'])
 @login_required
 def upload_termo(id_publico):
+    equipamento = Equipamento.query.filter_by(id_publico=id_publico).first()
+
     if request.method == 'POST':
         try:
             if 'termo_pdf' not in request.files:
@@ -316,7 +327,6 @@ def upload_termo(id_publico):
                 return redirect(request.url)
 
             if allowed_file(arquivo.filename):
-                equipamento = Equipamento.query.filter_by(id_publico=id_publico).first()
                 if equipamento:
                     filename = f"{id_publico}.pdf"
                     blob_client = container_client.get_blob_client(filename)
@@ -334,7 +344,9 @@ def upload_termo(id_publico):
             print(f"Erro no upload: {e}")
             return redirect(request.url)
 
-    return render_template('upload_termo.html', id_publico=id_publico)
+    termo_existe = bool(equipamento and equipamento.termo_pdf_path)
+    return render_template('upload_termo.html', id_publico=id_publico, termo_existe=termo_existe)
+
 
 
 @app.route('/ver_termo/<string:id_publico>')
