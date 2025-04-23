@@ -1,37 +1,28 @@
 {% extends "base.html" %}
 {% block title %}Upload do Termo de Uso{% endblock %}
-
 {% block content %}
-<div class="container" style="max-width: 600px; margin: auto;">
-  <h2 class="text-center mb-4">Upload do Termo de Uso</h2>
-
+<div class="max-w-lg mx-auto bg-white p-6 mt-10 rounded-lg shadow">
+  <h2 class="text-2xl font-bold text-center mb-6">Upload do Termo de Uso</h2>
   {% if termo_existe %}
-    <div style="background-color: #fff3cd; border: 1px solid #ffeeba; color: #856404; padding: 10px; border-radius: 5px; margin-bottom: 20px;">
-      ⚠️ Já existe um termo de uso salvo para esse equipamento.<br>
-      <strong>O novo arquivo irá substituir o anterior.</strong>
-    </div>
+  <div class="bg-yellow-100 text-yellow-800 border border-yellow-300 p-4 rounded mb-6">
+    ⚠️ Já existe um termo de uso salvo para esse equipamento.<br>
+    <strong>O novo arquivo irá substituir o anterior.</strong>
+  </div>
   {% endif %}
-
-  <form method="post" enctype="multipart/form-data">
-    <div style="margin-bottom: 15px;">
-      <label for="termo_pdf"><strong>Selecione o arquivo PDF:</strong></label>
+  <form method="POST" enctype="multipart/form-data" class="space-y-4">
+    <div>
+      <label for="termo_pdf" class="font-medium">Selecione o arquivo PDF:</label>
       <input type="file" name="termo_pdf" id="termo_pdf" accept="application/pdf" required
-             style="display: block; margin-top: 5px; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+             class="w-full border px-4 py-2 rounded mt-1">
     </div>
-
-    <div style="text-align: center;">
-      <button type="submit" class="btn btn-primary" style="padding: 10px 20px;">
-        {% if termo_existe %}
-          Substituir Termo
-        {% else %}
-          Enviar Termo
-        {% endif %}
+    <div class="text-center">
+      <button type="submit" class="bg-blue-700 text-white px-6 py-2 rounded hover:bg-blue-800">
+        {% if termo_existe %}Substituir Termo{% else %}Enviar Termo{% endif %}
       </button>
     </div>
   </form>
-
-  <div class="text-center mt-3">
-    <a href="{{ url_for('consulta') }}" class="btn btn-secondary" style="margin-top: 10px;">⬅️ Voltar</a>
+  <div class="text-center mt-4">
+    <a href="{{ url_for('consulta') }}" class="text-gray-600 hover:underline">⬅️ Voltar</a>
   </div>
 </div>
 {% endblock %}

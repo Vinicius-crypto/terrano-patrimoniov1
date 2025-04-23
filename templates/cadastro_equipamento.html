@@ -1,106 +1,37 @@
-
 {% extends "base.html" %}
 {% block title %}Cadastrar Equipamento{% endblock %}
 {% block content %}
-<style>
-  .form-container {
-    background-color: white;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.1);
-    max-width: 800px;
-    margin: auto;
-  }
-
-  .form-container form {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .form-container label {
-    margin-top: 12px;
-    font-weight: bold;
-  }
-
-  .form-container input,
-  .form-container select,
-  .form-container textarea {
-    padding: 10px;
-    font-size: 1rem;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    width: 100%;
-    box-sizing: border-box;
-  }
-
-  .form-container button {
-    margin-top: 20px;
-    padding: 10px;
-    font-size: 1.1rem;
-    border: none;
-    background-color: #234F1E;
-    color: white;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-
-  .form-container button:hover {
-    background-color: #1b3e17;
-  }
-</style>
-
-<div class="page-container">
-  <div class="form-container">
-    <h2>Cadastrar Equipamento</h2>
-    <form method="post">
-      <label for="tipo">Tipo:</label>
-      <select name="tipo" id="tipo" required>
+<div class="max-w-3xl mx-auto bg-white p-6 mt-10 rounded-lg shadow">
+  <h2 class="text-2xl font-bold text-center mb-6">Cadastrar Equipamento</h2>
+  <form method="POST" class="space-y-4">
+    <div>
+      <label for="tipo" class="block font-medium">Tipo:</label>
+      <select id="tipo" name="tipo" required class="w-full border px-4 py-2 rounded">
         <option value="Notebook">Notebook</option>
         <option value="Celular">Celular</option>
         <option value="DVR">DVR</option>
         <option value="Outro">Outro</option>
       </select>
-
-      <label for="marca">Marca:</label>
-      <input type="text" name="marca" id="marca" required>
-
-      <label for="modelo">Modelo:</label>
-      <input type="text" name="modelo" id="modelo" required>
-
-      <label for="num_serie">Número de Série:</label>
-      <input type="text" name="num_serie" id="num_serie" required>
-
-      <label for="data_aquisicao">Data de Aquisição:</label>
-      <input type="date" name="data_aquisicao" id="data_aquisicao" required>
-
-      <label for="localizacao">Localização:</label>
-      <input type="text" name="localizacao" id="localizacao" required>
-
-      <label for="status">Status:</label>
-      <select name="status" id="status" required>
+    </div>
+    <div><label for="marca" class="block font-medium">Marca:</label><input type="text" id="marca" name="marca" required class="w-full border px-4 py-2 rounded"></div>
+    <div><label for="modelo" class="block font-medium">Modelo:</label><input type="text" id="modelo" name="modelo" required class="w-full border px-4 py-2 rounded"></div>
+    <div><label for="num_serie" class="block font-medium">Número de Série:</label><input type="text" id="num_serie" name="num_serie" required class="w-full border px-4 py-2 rounded"></div>
+    <div><label for="data_aquisicao" class="block font-medium">Data de Aquisição:</label><input type="date" id="data_aquisicao" name="data_aquisicao" required class="w-full border px-4 py-2 rounded"></div>
+    <div><label for="localizacao" class="block font-medium">Localização:</label><input type="text" id="localizacao" name="localizacao" required class="w-full border px-4 py-2 rounded"></div>
+    <div>
+      <label for="status" class="block font-medium">Status:</label>
+      <select id="status" name="status" required class="w-full border px-4 py-2 rounded">
         <option value="Estocado">Estocado</option>
         <option value="Em uso">Em uso</option>
         <option value="Manutenção">Manutenção</option>
       </select>
-
-      <label for="responsavel">Responsável:</label>
-      <input type="text" name="responsavel" id="responsavel">
-
-      <label for="ultima_manutencao">Última Manutenção:</label>
-      <input type="date" name="ultima_manutencao" id="ultima_manutencao">
-
-      <label for="valor">Valor R$:</label>
-      <input type="text" name="valor" id="valor">
-
-      <label for="observacoes">Observações:</label>
-      <input type="text" name="observacoes" id="observacoes">
-
-      <label for="SPE">SPE:</label>
-      <input type="text" name="SPE" id="SPE">
-
-      <button type="submit">Cadastrar</button>
-    </form>
-  </div>
+    </div>
+    <div><label for="responsavel" class="block font-medium">Responsável:</label><input type="text" id="responsavel" name="responsavel" class="w-full border px-4 py-2 rounded"></div>
+    <div><label for="ultima_manutencao" class="block font-medium">Última Manutenção:</label><input type="date" id="ultima_manutencao" name="ultima_manutencao" class="w-full border px-4 py-2 rounded"></div>
+    <div><label for="valor" class="block font-medium">Valor R$:</label><input type="text" id="valor" name="valor" class="w-full border px-4 py-2 rounded"></div>
+    <div><label for="observacoes" class="block font-medium">Observações:</label><input type="text" id="observacoes" name="observacoes" class="w-full border px-4 py-2 rounded"></div>
+    <div><label for="SPE" class="block font-medium">SPE:</label><input type="text" id="SPE" name="SPE" class="w-full border px-4 py-2 rounded"></div>
+    <button type="submit" class="bg-green-800 hover:bg-green-900 text-white px-6 py-2 rounded">Cadastrar</button>
+  </form>
 </div>
 {% endblock %}

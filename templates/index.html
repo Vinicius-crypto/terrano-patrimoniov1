@@ -1,46 +1,50 @@
 {% extends "base.html" %}
 {% block title %}Página Inicial{% endblock %}
 {% block content %}
-<h2>Lista de Equipamentos</h2>
-<p>
-  <a href="{{ url_for('cadastrar') }}">Cadastrar Equipamento</a> | 
-  <a href="{{ url_for('consulta') }}">Consultar Equipamentos</a> | 
-  <a href="{{ url_for('exportar_csv') }}">Exportar CSV</a> | 
-  <a href="{{ url_for('gerar_pdf') }}">Gerar PDF</a> | 
-  <a href="{{ url_for('cadastro_usuario') }}">Cadastrar Usuário</a>
-</p>
-<table border="1" cellpadding="5">
-  <thead>
-    <tr>
-      <th>ID Público</th>
-      <th>Tipo</th>
-      <th>Localização</th>
-      <th>Status</th>
-      <th>Marca</th>
-      <th>Modelo</th>
-      <th>Responsável</th>
-      <th>SPE</th>
-      <th>Valor</th>
-      <th>Observações</th>
-      <th>Última Manutenção</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for eq in equipamentos %}
-      <tr>
-        <td>{{ eq.id_publico }}</td>
-        <td>{{ eq.tipo }}</td>
-        <td>{{ eq.localizacao }}</td>
-        <td>{{ eq.status }}</td>
-        <td>{{ eq.marca }}</td>
-        <td>{{ eq.modelo }}</td>
-        <td>{{ eq.responsavel }}</td>
-        <td>{{ eq.SPE }}</td>
-        <td>{{ eq.valor }}</td>
-        <td>{{ eq.observacoes }}</td>
-        <td>{{ eq.ultima_manutencao }}</td>
-      </tr>
-    {% endfor %}
-  </tbody>
-</table>
+<div class="max-w-6xl mx-auto mt-10 bg-white p-6 rounded-lg shadow">
+  <h2 class="text-2xl font-bold mb-4">Lista de Equipamentos</h2>
+  <div class="mb-6 space-x-4">
+    <a href="{{ url_for('cadastrar') }}" class="text-blue-700 hover:underline">Cadastrar Equipamento</a>
+    <a href="{{ url_for('consulta') }}" class="text-blue-700 hover:underline">Consultar Equipamentos</a>
+    <a href="{{ url_for('exportar_csv') }}" class="text-blue-700 hover:underline">Exportar CSV</a>
+    <a href="{{ url_for('gerar_pdf') }}" class="text-blue-700 hover:underline">Gerar PDF</a>
+    <a href="{{ url_for('cadastro_usuario') }}" class="text-blue-700 hover:underline">Cadastrar Usuário</a>
+  </div>
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm border border-gray-300">
+      <thead class="bg-gray-100">
+        <tr>
+          <th class="border px-3 py-2">ID Público</th>
+          <th class="border px-3 py-2">Tipo</th>
+          <th class="border px-3 py-2">Localização</th>
+          <th class="border px-3 py-2">Status</th>
+          <th class="border px-3 py-2">Marca</th>
+          <th class="border px-3 py-2">Modelo</th>
+          <th class="border px-3 py-2">Responsável</th>
+          <th class="border px-3 py-2">SPE</th>
+          <th class="border px-3 py-2">Valor</th>
+          <th class="border px-3 py-2">Observações</th>
+          <th class="border px-3 py-2">Última Manutenção</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for eq in equipamentos %}
+        <tr class="hover:bg-gray-50">
+          <td class="border px-3 py-2">{{ eq.id_publico }}</td>
+          <td class="border px-3 py-2">{{ eq.tipo }}</td>
+          <td class="border px-3 py-2">{{ eq.localizacao }}</td>
+          <td class="border px-3 py-2">{{ eq.status }}</td>
+          <td class="border px-3 py-2">{{ eq.marca }}</td>
+          <td class="border px-3 py-2">{{ eq.modelo }}</td>
+          <td class="border px-3 py-2">{{ eq.responsavel }}</td>
+          <td class="border px-3 py-2">{{ eq.SPE }}</td>
+          <td class="border px-3 py-2">{{ eq.valor }}</td>
+          <td class="border px-3 py-2">{{ eq.observacoes }}</td>
+          <td class="border px-3 py-2">{{ eq.ultima_manutencao }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
 {% endblock %}

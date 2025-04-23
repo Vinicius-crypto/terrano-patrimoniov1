@@ -1,53 +1,51 @@
 {% extends "base.html" %}
 {% block title %}Consulta de Equipamentos{% endblock %}
 {% block content %}
-<div class="container" style="max-width: 1000px; margin: auto;">
-  <h2 class="text-center mb-4">Consulta de Equipamentos</h2>
+<div class="max-w-6xl mx-auto bg-white p-6 rounded-lg shadow mt-6">
+  <h2 class="text-2xl font-semibold mb-6 text-center">Consulta de Equipamentos</h2>
 
-  <!-- Formulário de busca -->
-  <form method="post" class="mb-4" style="display: flex; justify-content: center; gap: 10px;">
+  <form method="post" class="flex flex-col sm:flex-row gap-3 mb-6">
     <input type="text" name="busca" placeholder="Buscar..." value="{{ busca or '' }}"
-           style="flex:1; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
-    <button type="submit" class="btn" style="padding: 10px 20px;">Buscar</button>
+           class="flex-grow border border-gray-300 rounded px-4 py-2" />
+    <button type="submit" class="bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800">Buscar</button>
   </form>
 
-  <!-- Tabela de equipamentos -->
-  <table class="table" style="width:100%; border-collapse: collapse; margin: auto;">
-    <thead style="background-color: #f0f0f0;">
-      <tr>
-        <th style="border: 1px solid #ccc; padding: 8px;">
-          <a href="{{ url_for('consulta', ordenacao='id_publico') }}" style="text-decoration:none; color: inherit;">
-            ID Público 🔽
-          </a>
-        </th>
-        <th style="border: 1px solid #ccc; padding: 8px;">Tipo</th>
-        <th style="border: 1px solid #ccc; padding: 8px;">Localização</th>
-        <th style="border: 1px solid #ccc; padding: 8px;">Status</th>
-        <th style="border: 1px solid #ccc; padding: 8px;">Marca</th>
-        <th style="border: 1px solid #ccc; padding: 8px;">Modelo</th>
-        <th style="border: 1px solid #ccc; padding: 8px;">Termo</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for equipamento in resultados %}
-      <tr>
-        <td style="border: 1px solid #ccc; padding: 8px;">{{ equipamento.id_publico }}</td>
-        <td style="border: 1px solid #ccc; padding: 8px;">{{ equipamento.tipo }}</td>
-        <td style="border: 1px solid #ccc; padding: 8px;">{{ equipamento.localizacao }}</td>
-        <td style="border: 1px solid #ccc; padding: 8px;">{{ equipamento.status }}</td>
-        <td style="border: 1px solid #ccc; padding: 8px;">{{ equipamento.marca }}</td>
-        <td style="border: 1px solid #ccc; padding: 8px;">{{ equipamento.modelo }}</td>
-        <td style="border: 1px solid #ccc; padding: 8px; text-align: center;">
-          {% if equipamento.termo_pdf_path and equipamento.termo_pdf_path != 'None' %}
-            <a href="{{ url_for('ver_termo', id_publico=equipamento.id_publico) }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-link text-primary" style="color: #007bff; text-decoration: none; background: none; border: none; box-shadow: none; padding: 0; margin: 0;">📄 Visualizar Termo</a><br>
-            <a href="{{ url_for('upload_termo', id_publico=equipamento.id_publico) }}" class="btn btn-sm btn-link text-warning" style="color: #ffc107; text-decoration: none; background: none; border: none; box-shadow: none; padding: 0; margin: 0;">🔁 Substituir Termo</a>
-          {% else %}
-            <a href="{{ url_for('upload_termo', id_publico=equipamento.id_publico) }}" class="btn btn-sm btn-link text-secondary" style="color: #6c757d; text-decoration: none; background: none; border: none; box-shadow: none; padding: 0; margin: 0;">⬆️ Upload Termo</a>
-          {% endif %}        
-        </td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm border-collapse">
+      <thead class="bg-gray-100 text-left">
+        <tr>
+          <th class="border px-3 py-2">
+            <a href="{{ url_for('consulta', ordenacao='id_publico') }}" class="hover:underline">ID Público 🔽</a>
+          </th>
+          <th class="border px-3 py-2">Tipo</th>
+          <th class="border px-3 py-2">Localização</th>
+          <th class="border px-3 py-2">Status</th>
+          <th class="border px-3 py-2">Marca</th>
+          <th class="border px-3 py-2">Modelo</th>
+          <th class="border px-3 py-2">Termo</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for equipamento in resultados %}
+        <tr class="hover:bg-gray-50">
+          <td class="border px-3 py-2">{{ equipamento.id_publico }}</td>
+          <td class="border px-3 py-2">{{ equipamento.tipo }}</td>
+          <td class="border px-3 py-2">{{ equipamento.localizacao }}</td>
+          <td class="border px-3 py-2">{{ equipamento.status }}</td>
+          <td class="border px-3 py-2">{{ equipamento.marca }}</td>
+          <td class="border px-3 py-2">{{ equipamento.modelo }}</td>
+          <td class="border px-3 py-2 text-center">
+            {% if equipamento.termo_pdf_path and equipamento.termo_pdf_path != 'None' %}
+              <a href="{{ url_for('ver_termo', id_publico=equipamento.id_publico) }}" target="_blank" class="text-blue-600 hover:underline">📄 Visualizar</a><br>
+              <a href="{{ url_for('upload_termo', id_publico=equipamento.id_publico) }}" class="text-yellow-600 hover:underline">🔁 Substituir</a>
+            {% else %}
+              <a href="{{ url_for('upload_termo', id_publico=equipamento.id_publico) }}" class="text-gray-600 hover:underline">⬆️ Upload</a>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 </div>
 {% endblock %}

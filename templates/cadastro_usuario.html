@@ -1,31 +1,31 @@
 {% extends "base.html" %}
+{% block title %}Cadastro de Usuário{% endblock %}
 {% block content %}
-<div class="container" style="max-width: 600px; background-color: white; padding: 30px; margin-top: 40px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
-  <h2 class="text-center mb-4">Cadastro de Usuário</h2>
-
-  <form method="POST">
-    <div class="mb-3">
-      <label for="username" class="form-label">Nome de Usuário:</label>
-      <input type="text" id="username" name="username" required class="form-control">
+<div class="max-w-lg mx-auto bg-white p-6 mt-10 rounded-lg shadow">
+  <h2 class="text-2xl font-bold text-center mb-6">Cadastro de Usuário</h2>
+  <form method="POST" class="space-y-4">
+    <div>
+      <label for="username" class="block font-medium">Nome de Usuário:</label>
+      <input type="text" id="username" name="username" required class="w-full border px-4 py-2 rounded">
     </div>
-    <div class="mb-3">
-      <label for="senha" class="form-label">Senha:</label>
-      <input type="password" id="senha" name="senha" required class="form-control">
+    <div>
+      <label for="senha" class="block font-medium">Senha:</label>
+      <input type="password" id="senha" name="senha" required class="w-full border px-4 py-2 rounded">
     </div>
-    <div class="mb-3">
-      <label for="confirmar" class="form-label">Confirmar Senha:</label>
-      <input type="password" id="confirmar" name="confirmar" required class="form-control">
+    <div>
+      <label for="confirmar" class="block font-medium">Confirmar Senha:</label>
+      <input type="password" id="confirmar" name="confirmar" required class="w-full border px-4 py-2 rounded">
     </div>
-    <div class="mb-4">
-      <label for="nivel" class="form-label">Nível de Acesso:</label>
-      <select id="nivel" name="nivel" class="form-select">
+    <div>
+      <label for="nivel" class="block font-medium">Nível de Acesso:</label>
+      <select id="nivel" name="nivel" class="w-full border px-4 py-2 rounded">
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3 (Admin)</option>
       </select>
     </div>
     <div class="text-center">
-      <button type="submit" class="btn btn-success">Cadastrar</button>
+      <button type="submit" class="bg-green-800 hover:bg-green-900 text-white px-6 py-2 rounded">Cadastrar</button>
     </div>
   </form>
 </div>

@@ -1,41 +1,20 @@
 {% extends "base.html" %}
 {% block title %}Dashboard{% endblock %}
-
 {% block content %}
-<div class="container" style="max-width: 800px; margin: auto; text-align: center;">
-  <!-- Exibir o logotipo -->
-  <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" class="logo" style="width: 120px; height: auto; margin-bottom: 1em;">
-  
-  <h1>Bem-vindo {{ session.username }}!</h1>
-  <p>Gerencie seus equipamentos e acesse as funcionalidades abaixo:</p>
-  
-<div style="
-  display: flex;
-  flex-wrap: wrap;        /* permitir quebra de linha */
-  justify-content: center; 
-  gap: 0.5em;             /* espaço horizontal/vertical entre botões */
-  margin-top: 1.5em;
-">
-  <a href="{{ url_for('cadastrar') }}" class="btn" style="padding: 0.6em 1.2em; background-color: #2b4f2f; color: white; border-radius: 8px; text-decoration: none;">
-    Cadastrar Equipamento
-  </a>
-  <a href="{{ url_for('consulta') }}" class="btn" style="padding: 0.6em 1.2em; background-color: #2b4f2f; color: white; border-radius: 8px; text-decoration: none;">
-    Consultar Equipamentos
-  </a>
-  <a href="{{ url_for('exportar_csv') }}" class="btn" style="padding: 0.6em 1.2em; background-color: #2b4f2f; color: white; border-radius: 8px; text-decoration: none;">
-    Exportar CSV
-  </a>
-  <a href="{{ url_for('gerar_pdf') }}" class="btn" style="padding: 0.6em 1.2em; background-color: #2b4f2f; color: white; border-radius: 8px; text-decoration: none;">
-    Gerar PDF
-  </a>
-  {% if current_user.is_authenticated and current_user.nivel_acesso == 3 %}
-  <a href="{{ url_for('cadastro_usuario') }}" class="btn" style="padding: 0.6em 1.2em; background-color: #2b4f2f; color: white; border-radius: 8px; text-decoration: none;">
-    Cadastrar Usuário
-  </a>
-  {% endif %}
-  <a href="{{ url_for('logout') }}" class="btn" style="padding: 0.6em 1.2em; background-color: #444; color: white; border-radius: 8px; text-decoration: none;">
-    Sair
-  </a>
-</div>
+<div class="max-w-4xl mx-auto mt-10 text-center">
+  <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" class="mx-auto mb-6 w-28">
+  <h1 class="text-2xl font-bold">Bem-vindo {{ session.username }}!</h1>
+  <p class="text-gray-600 mt-2">Gerencie seus equipamentos e acesse as funcionalidades abaixo:</p>
 
+  <div class="flex flex-wrap justify-center gap-3 mt-8">
+    <a href="{{ url_for('cadastrar') }}" class="bg-green-800 hover:bg-green-900 text-white px-6 py-2 rounded">Cadastrar Equipamento</a>
+    <a href="{{ url_for('consulta') }}" class="bg-green-800 hover:bg-green-900 text-white px-6 py-2 rounded">Consultar Equipamentos</a>
+    <a href="{{ url_for('exportar_csv') }}" class="bg-green-800 hover:bg-green-900 text-white px-6 py-2 rounded">Exportar CSV</a>
+    <a href="{{ url_for('gerar_pdf') }}" class="bg-green-800 hover:bg-green-900 text-white px-6 py-2 rounded">Gerar PDF</a>
+    {% if current_user.is_authenticated and current_user.nivel_acesso == 3 %}
+    <a href="{{ url_for('cadastro_usuario') }}" class="bg-green-800 hover:bg-green-900 text-white px-6 py-2 rounded">Cadastrar Usuário</a>
+    {% endif %}
+    <a href="{{ url_for('logout') }}" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded">Sair</a>
+  </div>
+</div>
 {% endblock %}
