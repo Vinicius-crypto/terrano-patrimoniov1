@@ -1,3 +1,4 @@
+<!-- Template: consulta.html com Responsável como destaque -->
 {% extends "base.html" %}
 {% block title %}Consulta de Equipamentos{% endblock %}
 {% block content %}
@@ -5,38 +6,37 @@
   <h2 class="text-2xl font-semibold mb-6 text-center">Consulta de Equipamentos</h2>
 
   <form method="post" class="flex flex-col sm:flex-row gap-3 mb-6">
-    <input type="text" name="busca" placeholder="Buscar..." value="{{ busca or '' }}"
-           class="flex-grow border border-gray-300 rounded px-4 py-2" />
-    <button type="submit" class="bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800">Buscar</button>
+    <input type="text" name="busca" placeholder="Buscar..." value="{{ busca or '' }}" class="flex-grow border border-gray-300 rounded px-4 py-2" />
+    <button type="submit" class="bg-green-800 text-white px-4 py-2 rounded hover:bg-green-900">Buscar</button>
   </form>
 
   <div class="overflow-x-auto">
     <table class="w-full text-sm border-collapse">
       <thead class="bg-gray-100 text-left">
         <tr>
-          <th class="border px-3 py-2">
-            <a href="{{ url_for('consulta', ordenacao='id_publico') }}" class="hover:underline">ID Público 🔽</a>
-          </th>
+          <th class="border px-3 py-2">Responsável 👤</th>
           <th class="border px-3 py-2">Tipo</th>
           <th class="border px-3 py-2">Localização</th>
           <th class="border px-3 py-2">Status</th>
           <th class="border px-3 py-2">Marca</th>
           <th class="border px-3 py-2">Modelo</th>
+          <th class="border px-3 py-2">ID Público</th>
           <th class="border px-3 py-2">Termo</th>
         </tr>
       </thead>
       <tbody>
         {% for equipamento in resultados %}
         <tr class="hover:bg-gray-50">
-          <td class="border px-3 py-2">{{ equipamento.id_publico }}</td>
+          <td class="border px-3 py-2 font-semibold text-green-700">{{ equipamento.responsavel }}</td>
           <td class="border px-3 py-2">{{ equipamento.tipo }}</td>
           <td class="border px-3 py-2">{{ equipamento.localizacao }}</td>
           <td class="border px-3 py-2">{{ equipamento.status }}</td>
           <td class="border px-3 py-2">{{ equipamento.marca }}</td>
           <td class="border px-3 py-2">{{ equipamento.modelo }}</td>
+          <td class="border px-3 py-2">{{ equipamento.id_publico }}</td>
           <td class="border px-3 py-2 text-center">
             {% if equipamento.termo_pdf_path and equipamento.termo_pdf_path != 'None' %}
-              <a href="{{ url_for('ver_termo', id_publico=equipamento.id_publico) }}" target="_blank" class="text-blue-600 hover:underline">📄 Visualizar</a><br>
+              <a href="{{ url_for('ver_termo', id_publico=equipamento.id_publico) }}" target="_blank" class="text-green-700 hover:underline">📄 Visualizar</a><br>
               <a href="{{ url_for('upload_termo', id_publico=equipamento.id_publico) }}" class="text-yellow-600 hover:underline">🔁 Substituir</a>
             {% else %}
               <a href="{{ url_for('upload_termo', id_publico=equipamento.id_publico) }}" class="text-gray-600 hover:underline">⬆️ Upload</a>
