@@ -14,10 +14,10 @@
   <form method="POST">
     <input type="text" name="username" placeholder="Usuário" required class="w-full mb-4 border px-4 py-2 rounded">
     <input type="password" name="senha" placeholder="Senha" required class="w-full mb-4 border px-4 py-2 rounded">
-    <button type="submit" class="w-full bg-blue-700 hover:bg-blue-800 text-white font-semibold py-2 px-4 rounded">Entrar</button>
+    <button type="submit" class="bg-green-800 hover:bg-green-900 text-white font-semibold py-2 px-4 rounded">Entrar</button>
   </form>
   <p class="mt-4 text-center text-sm">
-    Não tem acesso? <a href="{{ url_for('solicitar_acesso') }}" class="text-blue-700 hover:underline">Solicitar ao administrador</a>
+    Não tem acesso? <a href="{{ url_for('solicitar_acesso') }}" class="bg-green-800 hover:bg-green-900">Solicitar ao administrador</a>
   </p>
 </div>
 {% endblock %}
