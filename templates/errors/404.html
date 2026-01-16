@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}Página não encontrada{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+  <div class="max-w-2xl mx-auto text-center">
+    
+    <!-- Ícone de erro 404 -->
+    <div class="mb-8">
+      <div class="text-9xl text-gray-300 font-bold">404</div>
+      <div class="text-6xl mb-4">😵</div>
+    </div>
+    
+    <!-- Mensagem principal -->
+    <div class="bg-white rounded-lg shadow-lg p-8">
+      <h1 class="text-3xl font-bold text-gray-800 mb-4">
+        Oops! Página não encontrada
+      </h1>
+      
+      <p class="text-gray-600 text-lg mb-6">
+        A página que você está procurando não existe ou foi movida.
+      </p>
+      
+      <!-- Sugestões -->
+      <div class="bg-gray-50 rounded-lg p-6 mb-6">
+        <h3 class="text-lg font-semibold text-gray-800 mb-3">
+          💡 O que você pode fazer:
+        </h3>
+        
+        <ul class="text-left text-gray-600 space-y-2">
+          <li>• Verificar se digitou o endereço corretamente</li>
+          <li>• Voltar à página anterior</li>
+          <li>• Ir para a página inicial</li>
+          <li>• Usar o menu de navegação</li>
+        </ul>
+      </div>
+      
+      <!-- Botões de ação -->
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="{{ url_for('home') }}" 
+           class="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200">
+          🏠 Página Inicial
+        </a>
+        
+        <button onclick="history.back()" 
+                class="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200">
+          ← Voltar
+        </button>
+      </div>
+    </div>
+    
+    <!-- Informações adicionais -->
+    <div class="mt-8 text-sm text-gray-500">
+      <p>Se o problema persistir, entre em contato com o administrador do sistema.</p>
+    </div>
+    
+  </div>
+</div>
+{% endblock %}

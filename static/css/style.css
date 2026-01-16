@@ -182,4 +182,22 @@ footer {
   .form-container button:hover {
     background-color: #256d44;
   }
+
+  /* Estilo para optgroups */
+  select optgroup {
+    font-weight: bold;
+    color: #2b4f2f;
+    background-color: #f8f9fa;
+    font-size: 14px;
+  }
+
+  select option {
+    font-weight: normal;
+    color: #333;
+    padding: 8px 12px;
+  }
+
+  select option:hover {
+    background-color: #e8f5e8;
+  }
   
