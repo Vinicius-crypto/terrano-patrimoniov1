@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Upload do Termo de Uso{% endblock %}
+{% block content %}
+<div class="max-w-lg mx-auto bg-white p-6 mt-10 rounded-lg shadow">
+  <h2 class="text-2xl font-bold text-center mb-6">Upload do Termo de Uso</h2>
+  {% if termo_existe %}
+  <div class="bg-yellow-100 text-yellow-800 border border-yellow-300 p-4 rounded mb-6">
+    ⚠️ Já existe um termo de uso salvo para esse equipamento.<br>
+    <strong>O novo arquivo irá substituir o anterior.</strong>
+  </div>
+  {% endif %}
+  <form method="POST" enctype="multipart/form-data" class="space-y-4">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <div>
+      <label for="termo_pdf" class="font-medium">Selecione o arquivo PDF:</label>
+      <input type="file" name="termo_pdf" id="termo_pdf" accept="application/pdf" required
+             class="w-full border px-4 py-2 rounded mt-1">
+    </div>
+    <div class="text-center">
+      <button type="submit" class="bg-green-800 hover:bg-green-900">
+        {% if termo_existe %}Substituir Termo{% else %}Enviar Termo{% endif %}
+      </button>
+    </div>
+  </form>
+  <div class="text-center mt-4">
+    <a href="{{ url_for('consulta') }}" class="text-gray-600 hover:underline">⬅️ Voltar</a>
+  </div>
+</div>
+{% endblock %}

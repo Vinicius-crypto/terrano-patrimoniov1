@@ -1,0 +1,217 @@
+{% extends "base.html" %}
+
+{% block title %}Gestão de Usuários - Administração{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-6">
+  <!-- Header -->
+  <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+    <div class="flex justify-between items-center">
+      <div>
+        <h1 class="text-3xl font-bold text-gray-800 mb-2">👥 Gestão de Usuários</h1>
+        <p class="text-gray-600">Administrar usuários do sistema</p>
+      </div>
+      <div class="flex space-x-3">
+        <a href="{{ url_for('cadastro_usuario') }}" 
+           class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-semibold">
+          ➕ Novo Usuário
+        </a>
+        <a href="{{ url_for('admin_relatorio_usuarios') }}" 
+           class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-semibold">
+          📊 Relatórios
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Estatísticas Rápidas -->
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+      <div class="text-2xl font-bold text-blue-800">{{ usuarios|length }}</div>
+      <div class="text-blue-600 text-sm">Total de Usuários</div>
+    </div>
+    <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+      <div class="text-2xl font-bold text-green-800">{{ usuarios|selectattr("ativo")|list|length }}</div>
+      <div class="text-green-600 text-sm">Usuários Ativos</div>
+    </div>
+    <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+      <div class="text-2xl font-bold text-red-800">{{ usuarios|rejectattr("ativo")|list|length }}</div>
+      <div class="text-red-600 text-sm">Usuários Inativos</div>
+    </div>
+    <div class="bg-purple-50 border border-purple-200 rounded-lg p-4">
+      <div class="text-2xl font-bold text-purple-800">{{ usuarios|selectattr("nivel_acesso", "equalto", 3)|list|length }}</div>
+      <div class="text-purple-600 text-sm">Administradores</div>
+    </div>
+  </div>
+
+  <!-- Lista de Usuários -->
+  <div class="bg-white rounded-lg shadow-md overflow-hidden">
+    <div class="px-6 py-4 bg-gray-50 border-b">
+      <h3 class="text-lg font-semibold text-gray-800">Lista de Usuários</h3>
+    </div>
+    
+    <div class="overflow-x-auto">
+      <table class="w-full">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Usuário</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome Completo</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nível</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Criado</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          {% for usuario in usuarios %}
+          <tr class="hover:bg-gray-50 {% if not usuario.ativo %}opacity-60{% endif %}">
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="flex items-center">
+                <div class="text-sm font-medium text-gray-900">{{ usuario.username }}</div>
+                {% if usuario.username == current_user.username %}
+                <span class="ml-2 px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded">Você</span>
+                {% endif %}
+              </div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+              {{ usuario.nome_completo or 'N/A' }}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              {% if usuario.nivel_acesso == 3 %}
+              <span class="px-2 py-1 text-xs bg-red-100 text-red-800 rounded-full">🔑 Administrador</span>
+              {% elif usuario.nivel_acesso == 2 %}
+              <span class="px-2 py-1 text-xs bg-yellow-100 text-yellow-800 rounded-full">✏️ Operador</span>
+              {% else %}
+              <span class="px-2 py-1 text-xs bg-gray-100 text-gray-800 rounded-full">👁️ Visualizador</span>
+              {% endif %}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              {% if usuario.ativo %}
+              <span class="px-2 py-1 text-xs bg-green-100 text-green-800 rounded-full">✅ Ativo</span>
+              {% else %}
+              <span class="px-2 py-1 text-xs bg-red-100 text-red-800 rounded-full">❌ Inativo</span>
+              {% endif %}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+              {% if usuario.created_at %}
+                {{ usuario.created_at.strftime('%d/%m/%Y') }}
+              {% else %}
+                N/A
+              {% endif %}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm">
+              <div class="flex space-x-2">
+                <!-- Editar -->
+                <a href="{{ url_for('admin_editar_usuario', user_id=usuario.id) }}" 
+                   class="text-blue-600 hover:text-blue-900" title="Editar usuário">
+                  ✏️
+                </a>
+                
+                <!-- Toggle Status -->
+                {% if usuario.username != current_user.username %}
+                <button onclick="toggleUserStatus({{ usuario.id }}, '{{ usuario.username }}')" 
+                        class="text-yellow-600 hover:text-yellow-900" 
+                        title="{% if usuario.ativo %}Desativar{% else %}Ativar{% endif %} usuário">
+                  {% if usuario.ativo %}🔒{% else %}🔓{% endif %}
+                </button>
+                {% endif %}
+                
+                <!-- Reset Senha -->
+                <button onclick="resetPassword({{ usuario.id }}, '{{ usuario.username }}')" 
+                        class="text-orange-600 hover:text-orange-900" title="Resetar senha">
+                  🔑
+                </button>
+                
+                <!-- Excluir -->
+                {% if usuario.username != 'admin' and usuario.username != current_user.username %}
+                <button onclick="deleteUser({{ usuario.id }}, '{{ usuario.username }}')" 
+                        class="text-red-600 hover:text-red-900" title="Excluir usuário">
+                  🗑️
+                </button>
+                {% endif %}
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  
+  {% if not usuarios %}
+  <div class="text-center py-8 text-gray-500">
+    <p>Nenhum usuário encontrado.</p>
+  </div>
+  {% endif %}
+</div>
+
+<!-- Scripts JavaScript -->
+<script>
+function toggleUserStatus(userId, username) {
+    if (confirm(`Tem certeza que deseja alterar o status do usuário ${username}?`)) {
+        fetch(`/admin/usuario/${userId}/toggle_status`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert('Erro: ' + data.error);
+            }
+        })
+        .catch(error => {
+            alert('Erro na conexão: ' + error);
+        });
+    }
+}
+
+function resetPassword(userId, username) {
+    if (confirm(`Tem certeza que deseja resetar a senha do usuário ${username}?`)) {
+        fetch(`/admin/usuario/${userId}/resetar_senha`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.message);
+            } else {
+                alert('Erro: ' + data.error);
+            }
+        })
+        .catch(error => {
+            alert('Erro na conexão: ' + error);
+        });
+    }
+}
+
+function deleteUser(userId, username) {
+    if (confirm(`ATENÇÃO: Tem certeza que deseja EXCLUIR permanentemente o usuário ${username}? Esta ação não pode ser desfeita!`)) {
+        fetch(`/admin/usuario/${userId}/excluir`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.message);
+                location.reload();
+            } else {
+                alert('Erro: ' + data.error);
+            }
+        })
+        .catch(error => {
+            alert('Erro na conexão: ' + error);
+        });
+    }
+}
+</script>
+{% endblock %}

@@ -1,0 +1,280 @@
+{% extends "base.html" %}
+{% block title %}Cadastrar Equipamento{% endblock %}
+{% block content %}
+<div class="max-w-3xl mx-auto bg-white p-6 mt-10 rounded-lg shadow">
+  <h2 class="text-2xl font-bold text-center mb-6">Cadastrar Equipamento</h2>
+  <form method="POST" enctype="multipart/form-data" class="space-y-4">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <div>
+      <label for="tipo" class="block font-medium">Tipo:</label>
+      <select id="tipo" name="tipo" required class="w-full border px-4 py-2 rounded">
+        <optgroup label="Equipamentos de Informática">
+          <option value="Notebook">Notebook</option>
+          <option value="Desktop">Desktop/Computador</option>
+          <option value="Monitor">Monitor</option>
+          <option value="Teclado">Teclado</option>
+          <option value="Mouse">Mouse</option>
+          <option value="Impressora">Impressora</option>
+          <option value="Scanner">Scanner</option>
+          <option value="Roteador">Roteador/Switch</option>
+          <option value="HD/SSD">HD/SSD</option>
+          <option value="Memoria">Memória RAM</option>
+        </optgroup>
+        <optgroup label="Equipamentos de Escritório">
+          <option value="Mesa">Mesa</option>
+          <option value="Cadeira">Cadeira</option>
+          <option value="Armario">Armário</option>
+          <option value="Arquivo">Arquivo</option>
+          <option value="Telefone">Telefone</option>
+          <option value="Projetor">Projetor</option>
+          <option value="TV">TV</option>
+          <option value="Ar Condicionado">Ar Condicionado</option>
+        </optgroup>
+        <optgroup label="Equipamentos Móveis">
+          <option value="Celular">Celular</option>
+          <option value="Tablet">Tablet</option>
+          <option value="Smartphone">Smartphone</option>
+        </optgroup>
+        <optgroup label="Equipamentos de Segurança">
+          <option value="DVR">DVR</option>
+          <option value="Camera">Câmera de Segurança</option>
+          <option value="Alarme">Sistema de Alarme</option>
+        </optgroup>
+        <optgroup label="Outros">
+          <option value="Outro">Outro</option>
+        </optgroup>
+      </select>
+    </div>
+    <div><label for="marca" class="block font-medium">Marca:</label><input type="text" id="marca" name="marca" required class="w-full border px-4 py-2 rounded"></div>
+    <div><label for="modelo" class="block font-medium">Modelo:</label><input type="text" id="modelo" name="modelo" required class="w-full border px-4 py-2 rounded"></div>
+    <div><label for="num_serie" class="block font-medium">Número de Série:</label><input type="text" id="num_serie" name="num_serie" required class="w-full border px-4 py-2 rounded"></div>
+    <div><label for="data_aquisicao" class="block font-medium">Data de Aquisição:</label><input type="date" id="data_aquisicao" name="data_aquisicao" required class="w-full border px-4 py-2 rounded"></div>
+    <div><label for="localizacao" class="block font-medium">Localização:</label><input type="text" id="localizacao" name="localizacao" required class="w-full border px-4 py-2 rounded"></div>
+    <div>
+      <label for="status" class="block font-medium">Status:</label>
+      <select id="status" name="status" required class="w-full border px-4 py-2 rounded">
+        <option value="Estocado">Estocado</option>
+        <option value="Em uso">Em uso</option>
+        <option value="Manutenção">Manutenção</option>
+      </select>
+    </div>
+    <div><label for="responsavel" class="block font-medium">Responsável:</label><input type="text" id="responsavel" name="responsavel" class="w-full border px-4 py-2 rounded"></div>
+    <div><label for="ultima_manutencao" class="block font-medium">Última Manutenção:</label><input type="date" id="ultima_manutencao" name="ultima_manutencao" class="w-full border px-4 py-2 rounded"></div>
+    <div><label for="valor" class="block font-medium">Valor R$:</label><input type="text" id="valor" name="valor" class="w-full border px-4 py-2 rounded"></div>
+    <div><label for="observacoes" class="block font-medium">Observações:</label><input type="text" id="observacoes" name="observacoes" class="w-full border px-4 py-2 rounded"></div>
+    <div><label for="SPE" class="block font-medium">SPE:</label><input type="text" id="SPE" name="SPE" class="w-full border px-4 py-2 rounded"></div>
+    
+    <!-- Novos campos organizacionais -->
+    <div class="border-t pt-4 mt-4">
+      <h3 class="text-lg font-semibold mb-3 text-green-800">Informações Adicionais</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div><label for="codigo_barras" class="block font-medium">Código de Barras:</label><input type="text" id="codigo_barras" name="codigo_barras" class="w-full border px-4 py-2 rounded"></div>
+        <div><label for="garantia_ate" class="block font-medium">Garantia até:</label><input type="date" id="garantia_ate" name="garantia_ate" class="w-full border px-4 py-2 rounded"></div>
+        <div><label for="centro_custo" class="block font-medium">Centro de Custo:</label><input type="text" id="centro_custo" name="centro_custo" placeholder="Ex: TI, RH, Financeiro" class="w-full border px-4 py-2 rounded"></div>
+        <div>
+          <label for="fornecedor_id" class="block font-medium">Fornecedor:</label>
+          <div class="flex gap-2">
+            <select id="fornecedor_id" name="fornecedor_id" class="flex-1 border px-4 py-2 rounded">
+              <option value="">Selecione um fornecedor...</option>
+              {% for fornecedor in fornecedores %}
+              <option value="{{ fornecedor.id }}">{{ fornecedor.nome }}</option>
+              {% endfor %}
+            </select>
+            <button type="button" onclick="abrirModalFornecedor()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded font-bold text-lg" title="Adicionar Novo Fornecedor">+</button>
+          </div>
+        </div>
+        <div>
+          <label for="categoria_id" class="block font-medium">Categoria:</label>
+          <div class="flex gap-2">
+            <select id="categoria_id" name="categoria_id" class="flex-1 border px-4 py-2 rounded">
+              <option value="">Selecione uma categoria...</option>
+              {% for categoria in categorias %}
+              <option value="{{ categoria.id }}">{{ categoria.nome }}</option>
+              {% endfor %}
+            </select>
+            <button type="button" onclick="abrirModalCategoria()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded font-bold text-lg" title="Adicionar Nova Categoria">+</button>
+          </div>
+        </div>
+        <div><label for="vida_util_anos" class="block font-medium">Vida Útil (anos):</label><input type="number" id="vida_util_anos" name="vida_util_anos" min="1" max="20" value="5" class="w-full border px-4 py-2 rounded"></div>
+      </div>
+      
+      <!-- Upload de Imagem -->
+      <div class="mt-4 pt-4 border-t">
+        <h4 class="text-md font-semibold mb-2 text-green-800">📸 Foto do Equipamento</h4>
+        <div class="flex flex-col space-y-2">
+          <label for="imagem" class="block font-medium">Selecionar Imagem:</label>
+          <input type="file" id="imagem" name="imagem" accept="image/*" class="w-full border px-4 py-2 rounded bg-gray-50 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-green-50 file:text-green-700 hover:file:bg-green-100">
+          <p class="text-sm text-gray-600">Formatos aceitos: JPG, PNG, GIF (máx. 5MB)</p>
+        </div>
+      </div>
+    </div>
+    
+    <button type="submit" class="w-full bg-green-800 hover:bg-green-900 text-white px-6 py-3 rounded-lg mt-6 font-semibold">Cadastrar Equipamento</button>
+  </form>
+</div>
+
+<!-- Modal para Adicionar Fornecedor -->
+<div id="modalFornecedor" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+  <div class="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+    <div class="flex justify-between items-center mb-4">
+      <h3 class="text-xl font-bold text-green-800">Novo Fornecedor</h3>
+      <button onclick="fecharModalFornecedor()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+    </div>
+    <form id="formFornecedor" onsubmit="salvarFornecedor(event)" class="space-y-4">
+      <div>
+        <label for="fornecedor_nome" class="block font-medium">Nome do Fornecedor:</label>
+        <input type="text" id="fornecedor_nome" required class="w-full border px-4 py-2 rounded">
+      </div>
+      <div>
+        <label for="fornecedor_cnpj" class="block font-medium">CNPJ (opcional):</label>
+        <input type="text" id="fornecedor_cnpj" placeholder="00.000.000/0000-00" class="w-full border px-4 py-2 rounded">
+      </div>
+      <div>
+        <label for="fornecedor_telefone" class="block font-medium">Telefone (opcional):</label>
+        <input type="text" id="fornecedor_telefone" placeholder="(00) 0000-0000" class="w-full border px-4 py-2 rounded">
+      </div>
+      <div class="flex gap-2 mt-4">
+        <button type="button" onclick="fecharModalFornecedor()" class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded">Cancelar</button>
+        <button type="submit" class="flex-1 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">Salvar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal para Adicionar Categoria -->
+<div id="modalCategoria" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+  <div class="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+    <div class="flex justify-between items-center mb-4">
+      <h3 class="text-xl font-bold text-green-800">Nova Categoria</h3>
+      <button onclick="fecharModalCategoria()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+    </div>
+    <form id="formCategoria" onsubmit="salvarCategoria(event)" class="space-y-4">
+      <div>
+        <label for="categoria_nome" class="block font-medium">Nome da Categoria:</label>
+        <input type="text" id="categoria_nome" required class="w-full border px-4 py-2 rounded">
+      </div>
+      <div>
+        <label for="categoria_descricao" class="block font-medium">Descrição (opcional):</label>
+        <textarea id="categoria_descricao" rows="3" class="w-full border px-4 py-2 rounded"></textarea>
+      </div>
+      <div class="flex gap-2 mt-4">
+        <button type="button" onclick="fecharModalCategoria()" class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded">Cancelar</button>
+        <button type="submit" class="flex-1 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">Salvar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+// Funções para Modal de Fornecedor
+function abrirModalFornecedor() {
+  document.getElementById('modalFornecedor').classList.remove('hidden');
+}
+
+function fecharModalFornecedor() {
+  document.getElementById('modalFornecedor').classList.add('hidden');
+  document.getElementById('formFornecedor').reset();
+}
+
+function salvarFornecedor(event) {
+  event.preventDefault();
+  
+  const nome = document.getElementById('fornecedor_nome').value;
+  const cnpj = document.getElementById('fornecedor_cnpj').value;
+  const telefone = document.getElementById('fornecedor_telefone').value;
+  
+  fetch('/api/fornecedor/criar', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ nome, cnpj, telefone })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      // Adicionar nova opção no select
+      const select = document.getElementById('fornecedor_id');
+      const option = document.createElement('option');
+      option.value = data.id;
+      option.textContent = data.nome;
+      option.selected = true;
+      select.appendChild(option);
+      
+      // Fechar modal
+      fecharModalFornecedor();
+      
+      // Mostrar mensagem de sucesso
+      alert('✅ Fornecedor cadastrado com sucesso!');
+    } else {
+      alert('❌ Erro ao cadastrar fornecedor: ' + data.error);
+    }
+  })
+  .catch(error => {
+    console.error('Erro:', error);
+    alert('❌ Erro ao cadastrar fornecedor!');
+  });
+}
+
+// Funções para Modal de Categoria
+function abrirModalCategoria() {
+  document.getElementById('modalCategoria').classList.remove('hidden');
+}
+
+function fecharModalCategoria() {
+  document.getElementById('modalCategoria').classList.add('hidden');
+  document.getElementById('formCategoria').reset();
+}
+
+function salvarCategoria(event) {
+  event.preventDefault();
+  
+  const nome = document.getElementById('categoria_nome').value;
+  const descricao = document.getElementById('categoria_descricao').value;
+  
+  fetch('/api/categoria/criar', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ nome, descricao })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      // Adicionar nova opção no select
+      const select = document.getElementById('categoria_id');
+      const option = document.createElement('option');
+      option.value = data.id;
+      option.textContent = data.nome;
+      option.selected = true;
+      select.appendChild(option);
+      
+      // Fechar modal
+      fecharModalCategoria();
+      
+      // Mostrar mensagem de sucesso
+      alert('✅ Categoria cadastrada com sucesso!');
+    } else {
+      alert('❌ Erro ao cadastrar categoria: ' + data.error);
+    }
+  })
+  .catch(error => {
+    console.error('Erro:', error);
+    alert('❌ Erro ao cadastrar categoria!');
+  });
+}
+
+// Fechar modais ao clicar fora
+window.onclick = function(event) {
+  const modalFornecedor = document.getElementById('modalFornecedor');
+  const modalCategoria = document.getElementById('modalCategoria');
+  if (event.target === modalFornecedor) {
+    fecharModalFornecedor();
+  }
+  if (event.target === modalCategoria) {
+    fecharModalCategoria();
+  }
+}
+</script>
+{% endblock %}

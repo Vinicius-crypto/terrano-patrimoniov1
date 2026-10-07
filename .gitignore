@@ -1,0 +1,35 @@
+# Ambiente
+venv/
+.venv/
+__pycache__/
+*.pyc
+
+# Segredos e configuração local
+.env
+!.env.example
+
+# Dados e artefatos locais
+instance/
+logs/
+*.db
+*.sqlite3
+*.sql
+*.dump
+backups/
+uploads/termos/*
+!uploads/termos/.gitkeep
+uploads/images/*
+!uploads/images/.gitkeep
+
+# IDEs e SO
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Ferramentas
+.pytest_cache/
+.ruff_cache/
+*.log
+*.bak
+*.tmp

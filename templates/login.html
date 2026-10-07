@@ -1,0 +1,24 @@
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{ category }}">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+{% block content %}
+<div class="max-w-md mx-auto bg-white p-6 mt-10 rounded-lg shadow">
+  <h2 class="text-2xl font-bold text-center mb-6">Login</h2>
+  <form method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <input type="text" name="username" placeholder="Usuário" required class="w-full mb-4 border px-4 py-2 rounded">
+    <input type="password" name="senha" placeholder="Senha" required class="w-full mb-4 border px-4 py-2 rounded">
+    <button type="submit" class="bg-green-800 hover:bg-green-900 text-white font-semibold py-2 px-4 rounded">Entrar</button>
+  </form>
+  <p class="mt-4 text-center text-sm">
+    Não tem acesso? <a href="{{ url_for('solicitar_acesso') }}" class="bg-green-800 hover:bg-green-900 text-white font-semibold py-2 px-4 rounded">Solicitar ao administrador</a>
+  </p>
+</div>
+{% endblock %}

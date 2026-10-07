@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Cadastro de Usuário{% endblock %}
+{% block content %}
+<div class="max-w-lg mx-auto bg-white p-6 mt-10 rounded-lg shadow">
+  <h2 class="text-2xl font-bold text-center mb-6">Cadastro de Usuário</h2>
+  <form method="POST" class="space-y-4">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <div>
+      <label for="username" class="block font-medium">Nome de Usuário:</label>
+      <input type="text" id="username" name="username" required class="w-full border px-4 py-2 rounded">
+    </div>
+    <div>
+      <label for="senha" class="block font-medium">Senha:</label>
+      <input type="password" id="senha" name="senha" required class="w-full border px-4 py-2 rounded">
+    </div>
+    <div>
+      <label for="confirmar" class="block font-medium">Confirmar Senha:</label>
+      <input type="password" id="confirmar" name="confirmar" required class="w-full border px-4 py-2 rounded">
+    </div>
+    <div>
+      <label for="nivel" class="block font-medium">Nível de Acesso:</label>
+      <select id="nivel" name="nivel" class="w-full border px-4 py-2 rounded">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3 (Admin)</option>
+      </select>
+    </div>
+    <div class="text-center">
+      <button type="submit" class="bg-green-800 hover:bg-green-900 text-white px-6 py-2 rounded">Cadastrar</button>
+    </div>
+  </form>
+</div>
+{% endblock %}
