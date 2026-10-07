@@ -5,7 +5,7 @@ Separação das rotas e lógica de apresentação
 import os
 import pandas as pd
 from datetime import datetime
-from flask import render_template, request, redirect, url_for, flash, send_file, jsonify, Response, session
+from flask import render_template, request, redirect, url_for, flash, send_file, send_from_directory, jsonify, Response, session
 from flask_login import login_required, current_user, login_user, logout_user
 from werkzeug.utils import secure_filename
 import uuid
@@ -15,7 +15,7 @@ from io import BytesIO
 
 from models import db, Usuario, Equipamento, Categoria, Fornecedor
 from services import EquipamentoService, HistoricoService, ReportService, SearchService
-from utils import criar_termo_cautela_pdf, allowed_file
+from utils import criar_termo_cautela_pdf, allowed_image
 
 def init_routes(app):
     """Inicializa todas as rotas da aplicação"""
@@ -136,7 +136,7 @@ def init_routes(app):
                 imagem_url = None
                 if 'imagem' in request.files:
                     file = request.files['imagem']
-                    if file and file.filename != '' and allowed_file(file.filename):
+                    if file and file.filename != '' and allowed_image(file.filename):
                         filename = f"{uuid.uuid4().hex}_{secure_filename(file.filename)}"
                         filepath = os.path.join(app.config['IMAGES_FOLDER'], filename)
                         file.save(filepath)
@@ -166,6 +166,12 @@ def init_routes(app):
         return render_template('cadastro_equipamento.html', 
                              categorias=categorias, 
                              fornecedores=fornecedores)
+    
+    @app.route('/uploads/images/<path:filename>')
+    @login_required
+    def imagem_equipamento(filename):
+        """Serve as imagens enviadas (somente usuários autenticados)"""
+        return send_from_directory(app.config['IMAGES_FOLDER'], filename)
     
     # ============= API ENDPOINTS PARA MODAIS =============
     
@@ -347,7 +353,7 @@ def init_routes(app):
                 # Upload de imagem (se houver)
                 if 'imagem' in request.files:
                     file = request.files['imagem']
-                    if file and file.filename != '' and allowed_file(file.filename):
+                    if file and file.filename != '' and allowed_image(file.filename):
                         filename = f"{uuid.uuid4().hex}_{secure_filename(file.filename)}"
                         filepath = os.path.join(app.config['IMAGES_FOLDER'], filename)
                         file.save(filepath)

@@ -9,13 +9,13 @@ from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 
 # Extensões permitidas para upload
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'pdf'}
+IMAGE_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
-def allowed_file(filename):
-    """Verifica se o arquivo tem extensão permitida"""
+def allowed_image(filename):
+    """Verifica se o arquivo tem extensão de imagem permitida"""
     if not filename:
         return False
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in IMAGE_EXTENSIONS
 
 def criar_termo_cautela_pdf(dados, pdf_buffer):
     """Criar PDF do Termo de Cautela"""

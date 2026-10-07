@@ -84,3 +84,60 @@ def test_cli_create_admin_exige_senha_forte(app):
     resp = runner.invoke(args=["create-admin", "--username", "novo", "--password", "Forte1234"])
     assert resp.exit_code == 0
     assert Usuario.query.filter_by(username="novo", nivel_acesso=3).one()
+
+
+PNG_1X1 = (
+    b"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01\x00\x00\x00\x01\x08\x06\x00\x00\x00\x1f\x15\xc4\x89"
+    b"\x00\x00\x00\rIDATx\x9cc\xf8\xff\xff?\x00\x05\xfe\x02\xfe\xa7\x9a\xa0\xa0\x00\x00\x00\x00IEND\xaeB`\x82"
+)
+
+
+def _cadastrar_com_imagem(client, nome_arquivo, conteudo):
+    from io import BytesIO
+    return client.post("/cadastrar", data={
+        "tipo": "Notebook", "marca": "Dell", "modelo": "X", "num_serie": "IMG1",
+        "localizacao": "Sede", "status": "Em uso",
+        "imagem": (BytesIO(conteudo), nome_arquivo),
+    }, content_type="multipart/form-data")
+
+
+def test_imagem_enviada_e_servida_para_usuario_logado(app, client, login, tmp_path, monkeypatch):
+    monkeypatch.setitem(app.config, "IMAGES_FOLDER", str(tmp_path))
+    login()
+    _cadastrar_com_imagem(client, "foto.png", PNG_1X1)
+
+    url = Equipamento.query.filter_by(num_serie="IMG1").one().imagem_url
+    assert url.startswith("/uploads/images/")
+
+    resp = client.get(url)
+    assert resp.status_code == 200
+    assert resp.mimetype == "image/png"
+    assert resp.data == PNG_1X1
+
+
+def test_imagem_exige_login(app, client, login, tmp_path, monkeypatch):
+    monkeypatch.setitem(app.config, "IMAGES_FOLDER", str(tmp_path))
+    login()
+    _cadastrar_com_imagem(client, "foto.png", PNG_1X1)
+    url = Equipamento.query.filter_by(num_serie="IMG1").one().imagem_url
+
+    client.get("/logout")
+    resp = client.get(url)
+    assert resp.status_code == 302
+    assert "/login" in resp.headers["Location"]
+
+
+def test_imagem_nao_permite_path_traversal(app, client, login, tmp_path, monkeypatch):
+    monkeypatch.setitem(app.config, "IMAGES_FOLDER", str(tmp_path))
+    login()
+    assert client.get("/uploads/images/../../app.py").status_code == 404
+    assert client.get("/uploads/images/%2e%2e/%2e%2e/app.py").status_code == 404
+
+
+def test_upload_de_imagem_rejeita_pdf(app, client, login, tmp_path, monkeypatch):
+    monkeypatch.setitem(app.config, "IMAGES_FOLDER", str(tmp_path))
+    login()
+    _cadastrar_com_imagem(client, "documento.pdf", b"%PDF-1.4")
+
+    assert Equipamento.query.filter_by(num_serie="IMG1").one().imagem_url is None
+    assert list(tmp_path.iterdir()) == []
